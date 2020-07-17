@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 
 
 const signin = async function(req,res){
+    console.log("Reaching")
     try{
         let user = await User.findOne({"email":req.body.email})
         if(!user){
@@ -12,7 +13,7 @@ const signin = async function(req,res){
         }
         if(!user.authenticate(req.body.password)){
             return res.status(401).json({
-                errror:"Email and password don't match"
+                errror:"Password don't match"
             })
         }
         const token = jwt.sign({_id:user._id},config.jwtSecret)
@@ -43,14 +44,13 @@ const requireSignin = expressJwt({
 })
 
 const hasAuthorization = function(req,res,next){
-    const authorized = (req.profile && req.auth &&
-         req.profile._id === req.auth._id)
+    const authorized = req.profile && req.auth && req.profile._id == req.auth._id
         if(!authorized){
             return res.status(403).json({
                 error:"User is not authorized to perform this action"
             })
-            next()
         }
+        next()
 }
 
 export default {signin,signout,requireSignin,hasAuthorization}

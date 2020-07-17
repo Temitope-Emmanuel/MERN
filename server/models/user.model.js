@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import crypto from 'crypto'
 
 const UserSchema = new mongoose.Schema({
     name:{
@@ -13,16 +14,16 @@ const UserSchema = new mongoose.Schema({
         match:[/.+\@.+\..+/, 'Please fill a valid email address'],
         required:"Email is required"
     },
-    created:{
-        type:Date,
-        default:Date.now
-    },
-    updated:Date,
     hashed_password:{
         type:String,
         required:"Password is required"
     },
-    salt:String
+    salt:String,
+    updated:Date,
+    created:{
+        type:Date,
+        default:Date.now
+    }
 })
 
 // use to create a virtual field on the document, is not 
@@ -36,30 +37,6 @@ UserSchema.virtual('password').set(function(password){
     return this._password
 })
 
-
-UserSchema.methods = {
-    // used to ensure the password from the user and the 
-    // saved password are the same
-    authenticate:function(plainText){
-        return this.encryptPassword(plainText) === this.hashed_password
-    },
-    // encrypt password on creation or update
-    encryptPassword : function(password) {
-        if(!this.password) return ""
-        try{
-            return crypto.createHmac('sha1',this.salt)
-            .update(password).digest('hex')
-        }catch(e){
-            return ''
-        }
-    },
-    // Create a salt for the hash, this ensure no two hash 
-    // for the same value are the same
-    makeSalt:function(){
-        return Math.round((new Date.now().valueOf() * Math.random())) + ''
-    }
-}
-
 // Adds Validation to the hashed_password receives the field
 // as first argument
 UserSchema.path('hashed_password').validate(function(v){
@@ -70,5 +47,28 @@ UserSchema.path('hashed_password').validate(function(v){
     }
     }
 },null)
+
+UserSchema.methods = {
+    // used to ensure the password from the user and the 
+    // saved password are the same
+    authenticate:function(plainText){
+        return this.encryptPassword(plainText) === this.hashed_password
+    },
+    // encrypt password on creation or update
+    encryptPassword : function(password) {
+        if(!password) return ""
+        try{
+            return crypto.createHmac('sha1',this.salt)
+            .update(password).digest('hex')
+        }catch(e){
+            return ''
+        }
+    },
+    // Create a salt for the hash, this ensure no two hash 
+    // for the same value are the same
+    makeSalt:function(){
+        return Math.round((new Date().valueOf() * Math.random())) + ''
+    }
+}
 
 export default mongoose.model("User",UserSchema)

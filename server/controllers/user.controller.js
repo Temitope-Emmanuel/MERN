@@ -1,5 +1,5 @@
 import User from '../models/user.model'
-// import extend from "loadsh/extend"
+import extend from "lodash/extend"
 import errorHandler from "../helpers/dbErrorHandler"
 
 
@@ -29,7 +29,7 @@ const list = async (req,res) => {
 
 const userByID = async (req,res,next,id) => {
     try {
-        let user = await user.findById(id)
+        let user = await User.findById(id)
         if(!user){
             return res.status(400).json({
                 error:"User Not Found"
@@ -52,15 +52,15 @@ const read = (req,res) => {
 const update = async (req,res) => {
     try{
         let user = req.profile
-        // let updatedUser = Object.create({},user,req.body)
-        user = {...user,...req.body}
+        user = extend(user,req.body)
         user.updated = Date.now()
         await user.save()
-        // await user.update({$set:{...req.body,updated:Date.now()}})
+        
         user.hashed_password = undefined
         user.salt = undefined
         res.json(user)
     }catch(err){
+        console.log("this is the error",err)
         return res.status(400).json({
             error:errorHandler.getErrorMessage(err)
         })

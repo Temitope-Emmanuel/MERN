@@ -16,9 +16,11 @@ app.use(helmet())
 app.use(cors())
 
 import userRoutes from "./routes/user.routes"
-
+import authRoutes from "./routes/auth.routes"
 
 app.use("/",userRoutes)
+app.use("/",authRoutes)
+
 app.get("/",(req,res) => {
     return res.status(200).send(Template())
 })
