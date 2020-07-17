@@ -5,11 +5,13 @@ const CURRENT_WORKING_DIR = process.cwd()
 const config = {
     name: "browser",
     mode: "development",
+    // For Development to track the source after compiling
     devtool: 'eval-source-map',
     entry: [
         'webpack-hot-middleware/client?reload=true',
         path.join(CURRENT_WORKING_DIR, 'client/main.js')
     ],
+    // Where the compiled file would be outputted? to
     output: {
         path: path.join(CURRENT_WORKING_DIR , '/dist'),
         filename: 'bundle.js',
@@ -17,6 +19,7 @@ const config = {
     },
     module: {
         rules: [
+            // to use the babel loader
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
@@ -24,12 +27,14 @@ const config = {
                     'babel-loader'
                 ]
             },
+            // For loading images
             {
                 test: /\.(ttf|eot|svg|gif|jpg|png)(\?[\s\S]+)?$/,
                 use: 'file-loader'
             }
         ]
     },  
+    // For hot loading of the app recompiles after detecting change
     plugins: [
           new webpack.HotModuleReplacementPlugin(),
           new webpack.NoEmitOnErrorsPlugin()
