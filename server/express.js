@@ -1,3 +1,4 @@
+import path from "path"
 import express from "express"
 import bodyParser from 'body-parser'
 import cookieParser from "cookie-parser"
@@ -6,8 +7,21 @@ import cors from "cors"
 import helmet from "helmet"
 import Template from "../template"
 
-const app = express()
+import userRoutes from "./routes/user.routes"
+import authRoutes from "./routes/auth.routes"
 
+import devBundle from './devBundle'
+
+const app = express()
+const CURRENT_WORKING_DIR = process.cwd()
+
+
+
+// Only for development
+devBundle.compile(app)
+
+app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
+    'dist')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser())
@@ -15,8 +29,6 @@ app.use(compress())
 app.use(helmet())
 app.use(cors())
 
-import userRoutes from "./routes/user.routes"
-import authRoutes from "./routes/auth.routes"
 
 app.use("/",userRoutes)
 app.use("/",authRoutes)
