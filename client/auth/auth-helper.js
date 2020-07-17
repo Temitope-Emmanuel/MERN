@@ -1,13 +1,12 @@
 const { signout } = require("./api-auth")
 
-authenticate(jwt,callback){
-    if(typeof window !== "undefined"){
-        sessionStorage.setItem('jwt',JSON.stringify(jwt))
-    }
-    callback()
+function authenticate(jwt, cb) {
+    if (typeof window !== "undefined")
+      sessionStorage.setItem('jwt', JSON.stringify(jwt))
+    cb()
 }
 
-isAuthenticated(){
+function isAuthenticated(){
     if(typeof window === "undefined"){
         return false
     }
@@ -18,7 +17,7 @@ isAuthenticated(){
     }
 }
 
-clearJWT(callback){
+function clearJWT(callback){
     if(typeof window !== "undefined"){
         sessionStorage.removeItem('jwt')
     }
@@ -28,4 +27,4 @@ clearJWT(callback){
     })
 }
 
-export default {clearJWT,isAuthenticated,authenticate}
+export {clearJWT,isAuthenticated,authenticate}

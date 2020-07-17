@@ -1,6 +1,6 @@
 const signin = async (user) => {
     try{
-        let response = await fetch('api/signin/',{
+        let response = await fetch('/auth/signin',{
             method:'POST',
             headers:{
                 'Accept':'application/json',
@@ -9,7 +9,9 @@ const signin = async (user) => {
             credentials:'include',
             body:JSON.stringify(user)
         })
-        return await response.json()
+        const result = await response.json()
+        console.log(result)
+        return result
     }catch(err){
         console.log(err)
     }
