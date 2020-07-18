@@ -1,6 +1,22 @@
 import User from '../models/user.model'
 import extend from "lodash/extend"
 import errorHandler from "../helpers/dbErrorHandler"
+import formidable from "formidable"
+import fs from "fs"
+
+import profileImage from "../../client/assets/images/profile-pic.png"
+
+
+const photo = (req,res,next) => {
+    if(req.profile.photo.data){
+        res.set("Content-Type",req.profile.photo.contentType)
+        return res.send(req.profile.photo.data)
+    }
+    next()
+}
+const defaultPhoto = (req,res) => {
+    return res.sendFile(process.cwd()+profileImage)
+}
 
 
 const create = async (req,res) => {
@@ -50,23 +66,34 @@ const read = (req,res) => {
     return res.json(req.profile)
 }
 
-const update = async (req,res) => {
-    console.log("Reaching the update router ")
-    try{
+const update = (req,res) => {
+    let form = new formidable.IncomingForm()
+    form.keepExtensions = true
+    form.parse(req,async (err,fields,files) => {
+        if(err){
+            return res.status(400).json({
+                error:"Photo could not be uploaded"
+            })
+        }
         let user = req.profile
-        user = extend(user,req.body)
+        user = extend(user,fields)
         user.updated = Date.now()
-        await user.save()
-        
-        user.hashed_password = undefined
-        user.salt = undefined
-        res.json(user)
-    }catch(err){
-        console.log("this is the error",err)
-        return res.status(400).json({
-            error:errorHandler.getErrorMessage(err)
-        })
-    }
+        if(files.photo){
+            user.photo.data = fs.readFileSync(files.photo.path)
+            user.photo.contentType = files.photo.type
+        }
+        try{
+            await user.save()
+            user.hashed_password = undefined
+            user.salt = undefined
+            res.json(user)
+        }catch(err){
+            console.log("this is the error",err)
+            return res.status(400).json({
+                error:errorHandler.getErrorMessage(err)
+            })
+        }
+    })
 }
 
 const remove = async (req,res) => {
@@ -84,4 +111,8 @@ const remove = async (req,res) => {
 }
 
 
-export default {create,userByID,read,list,remove,update}
+export default {
+    create,userByID,read,
+    list,remove,update,
+    photo,defaultPhoto
+}

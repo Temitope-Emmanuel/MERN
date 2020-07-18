@@ -35,6 +35,7 @@ const Profile = ({match}) => {
     const classes = useStyles()
     const [user,setUser] = React.useState({})
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
+    let photoUrl = "";
 
     React.useEffect(() => {
         const abortController = new AbortController()
@@ -48,17 +49,24 @@ const Profile = ({match}) => {
                 setRedirectToSignIn(true)
             }else{
                 setUser(data)
+                console.log(user._id)
             }
         })
         return function cleanup(){
             abortController.abort()
         }
     },[match.params.userId])
+    
+    // Added time in the url to bypass the image cache
+    // For faster reloading
+    photoUrl = user._id ? 
+    `/api/users/photo/${user._id}?${new Date().getTime()}`
+    : '/api/users/defaultphoto'
 
     if(redirectToSignIn){
         return <Redirect to="/signin" />
     }
-
+    console.log(photoUrl)
     return (
         <Paper className={classes.root} elevation={4}>
                 <Typography variant="h6" className={classes.title}>
@@ -67,9 +75,7 @@ const Profile = ({match}) => {
                 <List dense>
                     <ListItem>
                         <ListItemAvatar>
-                            <Avatar>
-                                <Person/>
-                            </Avatar>
+                            <Avatar src={photoUrl} />
                         </ListItemAvatar>
                         <ListItemText primary={user.name} secondary={user.email}/>
                         {isAuthenticated().user && isAuthenticated().user._id ==
@@ -86,7 +92,7 @@ const Profile = ({match}) => {
                     </ListItem>
                     <Divider/>
                     <ListItem>
-                        {/* <ListItemText primary={this.state.user.about}/> */}
+                        <ListItemText primary={user.about}/>
                     </ListItem>
                     <ListItem>
                         <ListItemText primary={"Joined: " + (

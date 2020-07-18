@@ -59,7 +59,10 @@ const EditProfile = ({ match }) => {
   const [values, setValues] = useState({
     name: '',
     password: '',
-    email: ''
+    email: '',
+    about:'',
+    userId:'',
+    photo:null
   })
 
   const [alert,setAlert] = useState({
@@ -95,11 +98,18 @@ const EditProfile = ({ match }) => {
   }, [match.params.userId])
 
   const clickSubmit = () => {
+    let userData = new FormData()
+    values.name && userData.append('name',values.name)
+    values.email && userData.append('email',values.email)
+    values.password && userData.append('password',values.password)
+    values.about && userData.append('about',values.about)
+    values.photo && userData.append('photo',values.photo)
+
     update({
       userId: match.params.userId
     }, {
       token: jwt.token
-    }, {...values}).then((data) => {
+    }, userData).then((data) => {
         console.log(data)
       if (data && data.error) {
         setAlert({...alert, error: data.error})
@@ -110,28 +120,40 @@ const EditProfile = ({ match }) => {
   }
 
   const handleChange = name => event => {
-    setValues({...values, [name]: event.target.value})
+    const value = name === 'photo' ? 
+    event.target.files[0]:
+    event.target.value
+    
+    setValues({...values, [name]: value})
+    console.log(values)
   }
   
     if (values.redirectToProfile) {
       return (<Redirect to={'/user/' + values.userId}/>)
     }
-
+    
     return (
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
             Edit Profile
           </Typography>
-          <input accept="image/*" onChange={handleChange('photo')} className={classes.input}
+
+          <input accept="image/*"
+           onChange={handleChange('photo')}
+           className={classes.input}
            id="icon-button-file" type="file" />
           <label htmlFor="icon-button-file">
             <Button variant="contained" color="default"
-             >
+            component="span">
               Upload
               <FileUpload/>
             </Button>
-          </label> <span className={classes.filename}>{values.photo ? values.photo.name : ''}</span><br/>
+          </label> 
+          <span className={classes.filename}>
+            {values.photo ? values.photo.name : ''}
+          </span><br/>
+          
           <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
           <TextField
             id="multiline-flexible"
@@ -143,7 +165,6 @@ const EditProfile = ({ match }) => {
             className={classes.textField}
             margin="normal"
           /><br/>
-            <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
           <TextField id="email" type="email" label="Email" className={classes.textField} value={values.email} onChange={handleChange('email')} margin="normal"/><br/>
           <TextField id="password" type={isVisible ? "text":"password"} label="Password"
             autoFocus={false} className={classes.textField} value={values.password}
