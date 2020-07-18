@@ -13,7 +13,7 @@ const signin = async function(req,res){
         }
         if(!user.authenticate(req.body.password)){
             return res.status(401).json({
-                errror:"Password don't match"
+                error:"Password don't match"
             })
         }
         const token = jwt.sign({_id:user._id},config.jwtSecret)
@@ -31,12 +31,13 @@ const signin = async function(req,res){
     }
 }
 const signout = function(req,res){
+    console.log("Reaching")
     res.clearCookie("t")
     return res.status(200).json({
         message:"Signed out"
     })
 }
-// const requireSignin = function(req,res,next){}
+
 const requireSignin = expressJwt({
     secret:config.jwtSecret,
     userProperty:'auth',

@@ -56,14 +56,8 @@ const Signin = (props) => {
     },[values])    
 
     const isValid = () => {
-        // try{
             return ["email","password"].every(
                 (i) => values[i].length > 3 )
-        // }catch(err){
-        //     console.log(err)
-        // }finally{
-        //     return true
-        // }
     }
 
     const clickSubmit = () => {

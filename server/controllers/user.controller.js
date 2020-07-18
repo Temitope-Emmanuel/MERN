@@ -16,17 +16,18 @@ const create = async (req,res) => {
         })
     }
 }
-const list = async (req,res) => {
-    try{
-        const foundUser = await User.find({}).select('name email updated created')
-        res.status(200).json(foundUser)
-    }catch(err) {
-        return res.status(400).json({
-            error:errorHandler.getErrorMessage(err)
-        })
-    }
-}
 
+const list = async (req, res) => {
+    try {
+      let users = await User.find().select('name email updated created')
+    return res.status(200).json(users)
+    } catch (err) {
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+    }
+  }
+  
 const userByID = async (req,res,next,id) => {
     try {
         let user = await User.findById(id)
@@ -50,6 +51,7 @@ const read = (req,res) => {
 }
 
 const update = async (req,res) => {
+    console.log("Reaching the update router ")
     try{
         let user = req.profile
         user = extend(user,req.body)

@@ -20,8 +20,7 @@ const CURRENT_WORKING_DIR = process.cwd()
 // Only for development
 devBundle.compile(app)
 
-app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
-    'dist')))
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser())
@@ -32,9 +31,15 @@ app.use(cors())
 
 app.use("/",userRoutes)
 app.use("/",authRoutes)
+app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
+    'dist')))
 
 app.get("/",(req,res) => {
     return res.status(200).send(Template())
+})
+
+app.get("*",(req,res) => {
+    return res.redirect(302,"/")
 })
 
 app.use((err,req,res,next) => {
