@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Icon from '@material-ui/core/Icon'
+import FileUpload from '@material-ui/icons/AddPhotoAlternate'
 import { makeStyles } from '@material-ui/core/styles'
 import {isAuthenticated} from './../auth/auth-helper'
 import {read, update} from './api-user.js'
@@ -39,6 +40,17 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: 'auto',
     marginBottom: theme.spacing(2)
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60,
+    margin: 'auto'
+  },
+  input: {
+    display: 'none'
+  },
+  filename:{
+    marginLeft:'10px'
   }
 }))
 
@@ -111,7 +123,27 @@ const EditProfile = ({ match }) => {
           <Typography variant="h6" className={classes.title}>
             Edit Profile
           </Typography>
+          <input accept="image/*" onChange={handleChange('photo')} className={classes.input}
+           id="icon-button-file" type="file" />
+          <label htmlFor="icon-button-file">
+            <Button variant="contained" color="default"
+             >
+              Upload
+              <FileUpload/>
+            </Button>
+          </label> <span className={classes.filename}>{values.photo ? values.photo.name : ''}</span><br/>
           <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
+          <TextField
+            id="multiline-flexible"
+            label="About"
+            multiline
+            rows="2"
+            value={values.about}
+            onChange={handleChange('about')}
+            className={classes.textField}
+            margin="normal"
+          /><br/>
+            <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
           <TextField id="email" type="email" label="Email" className={classes.textField} value={values.email} onChange={handleChange('email')} margin="normal"/><br/>
           <TextField id="password" type={isVisible ? "text":"password"} label="Password"
             autoFocus={false} className={classes.textField} value={values.password}

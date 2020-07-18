@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import {authenticate} from './../auth/auth-helper'
+import {authenticate,isAuthenticated} from './../auth/auth-helper'
 import {Redirect} from 'react-router-dom'
 import {signin} from "./api-auth"
 
@@ -88,7 +88,15 @@ const Signin = (props) => {
         }    
         return <Redirect to={from} />
     }
-
+    if(isAuthenticated() ){
+      const {from} = props.location.state || {
+        from :{
+            pathname:`/user/${isAuthenticated().user._id}`
+        }
+    }    
+      return <Redirect to={from } />
+    }
+    
     return (
         <Card className={classes.card}>
           <CardContent>

@@ -16,13 +16,13 @@ const MainRouter = () => {
         <>
             <Menu/>
             <Switch>
+                <Route exact path="/" component={Home} />
                 <Route exact path="/users" component={Users} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/signin" component={SignIn} />
-                <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+                <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
                 <Route exact path="/user/:userId" component={Profile} />
-                <Route exact path="/" component={Home} />
-                <Route render={() => <Redirect to="/" />} />
+                {/* <Route render={() => <Redirect to="/" />} /> */}
             </Switch>
         </>
     )

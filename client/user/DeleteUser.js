@@ -43,7 +43,7 @@ const DeletedUser = (props) => {
           <DeleteIcon/>
         </IconButton>
   
-        <Dialog open={open} onClose={handleRequestClose}>
+        <Dialog open={open} onClose={clickButton}>
           <DialogTitle>{"Delete Account"}</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -51,7 +51,7 @@ const DeletedUser = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleRequestClose} color="primary">
+            <Button onClick={clickButton} color="primary">
               Cancel
             </Button>
             <Button onClick={deleteAccount} color="secondary" autoFocus="autoFocus">

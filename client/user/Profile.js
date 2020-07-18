@@ -80,10 +80,14 @@ const Profile = ({match}) => {
                                             <Edit/>
                                         </IconButton>
                                     </Link>
+                                    <DeleteUser userId={user._id} />
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>
                     <Divider/>
+                    <ListItem>
+                        {/* <ListItemText primary={this.state.user.about}/> */}
+                    </ListItem>
                     <ListItem>
                         <ListItemText primary={"Joined: " + (
                             new Date(user.created)).toDateString()}/>

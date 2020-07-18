@@ -17,14 +17,14 @@ function isAuthenticated(){
     }
 }
 
-function clearJWT(callback){
-    if(typeof window !== "undefined"){
-        sessionStorage.removeItem('jwt')
-    }
-    callback()
-    signout.then((data) => {
-        document.cookie = 't=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+function clearJWT(cb) {
+    if (typeof window !== "undefined")
+      sessionStorage.removeItem('jwt')
+    cb()
+    //optional
+    signout().then((data) => {
+      document.cookie = "t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     })
-}
+  }
 
 export {clearJWT,isAuthenticated,authenticate}
