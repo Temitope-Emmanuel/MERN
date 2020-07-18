@@ -1,4 +1,43 @@
 
+const follow = async (params,credentials,followId) => {
+  try{
+    let response = await fetch('/api/users/follow/',{
+      method:'PUT',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        Authorization:'Bearer ' + credentials.token
+      },
+      body:JSON.stringify({
+        userId:params.userId,
+        followId:followId
+      })
+    })
+    return await response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
+const unfollow = async (params,credentials,unfollowId) => {
+  try{
+    let response = await fetch('/api/users/unfollow',{
+      method:'PUT',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ' + credentials.token
+      },
+      body:JSON.stringify({
+        userId:params.userId,unfollowId:unfollowId
+      })
+    })
+    return await response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
+
+
 export const create = async (user) => {
     try {
         let response = await fetch('/api/user', {
@@ -28,6 +67,7 @@ export const create = async (user) => {
   }
   
   const read = async (params, credentials, signal) => {
+    console.log("caling the read function")
     try {
       let response = await fetch('/api/user/' + params.userId, {
         method: 'GET',
@@ -82,5 +122,7 @@ export const create = async (user) => {
     list,
     read,
     update,
-    remove
+    remove,
+    follow,
+    unfollow
   }

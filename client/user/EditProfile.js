@@ -88,6 +88,7 @@ const EditProfile = ({ match }) => {
       if (data && data.error) {
         setAlert({...alert, error: data.error})
       } else {
+        console.log("This is the data",data)
         setValues({...values, name: data.name, email: data.email})
       }
     })
