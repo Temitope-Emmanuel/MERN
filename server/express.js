@@ -7,6 +7,12 @@ import cors from "cors"
 import helmet from "helmet"
 import Template from "../template"
 
+// For SSR functionality
+import React from "react"
+import ReactDOMServer from "react-dom/server"
+import StaticRouter from "react-router-dom/StaticRouter"
+import MainRouter from "../client/MainRouter"
+
 import userRoutes from "./routes/user.routes"
 import authRoutes from "./routes/auth.routes"
 

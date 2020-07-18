@@ -113,7 +113,7 @@ const EditProfile = ({ match }) => {
           </Typography>
           <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
           <TextField id="email" type="email" label="Email" className={classes.textField} value={values.email} onChange={handleChange('email')} margin="normal"/><br/>
-          <TextField id="password" type="password" label="Password"
+          <TextField id="password" type={isVisible ? "text":"password"} label="Password"
             autoFocus={false} className={classes.textField} value={values.password}
              onChange={handleChange('password')} margin="normal"
              InputProps={{
@@ -125,9 +125,9 @@ const EditProfile = ({ match }) => {
             }} 
             />
           <br/> {
-            values.error && (<Typography component="p" color="error">
-              <Icon color="error" className={classes.error}>error</Icon>
-              {values.error}
+            alert.error && (<Typography component="p" color="error">
+              {/* <Icon color="error" className={classes.error}>error</Icon> */}
+              {alert.error}
             </Typography>)
           }
         </CardContent>

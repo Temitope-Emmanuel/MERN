@@ -23,7 +23,7 @@ function clearJWT(callback){
     }
     callback()
     signout.then((data) => {
-        document.cookiev= 't=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        document.cookie = 't=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     })
 }
 
