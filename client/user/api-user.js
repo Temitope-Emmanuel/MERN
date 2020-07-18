@@ -118,11 +118,29 @@ export const create = async (user) => {
     }
   }
   
+  const findPeople = async (params,credentials,signal) => {
+    try{
+      let response = await fetch(`/api/users/findpeople/${params.userId}`,{
+        method:'GET',
+        signal:signal,
+        headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+          'Authorization':`Bearer ${credentials.token}` 
+        }
+      })
+      return await response.json()
+    }catch(err){
+      console.log(err)
+    }
+  }
+  
   export {
     list,
     read,
     update,
     remove,
     follow,
-    unfollow
+    unfollow,
+    findPeople
   }

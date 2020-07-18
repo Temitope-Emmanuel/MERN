@@ -16,6 +16,8 @@ import DeleteUser from './DeleteUser'
 import {read} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
 import FollowProfileButton from "./FollowProfileButton"
+import ProfileTabs from "./ProfileTabs"
+import FindPeople from "./FindPeople"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -33,15 +35,18 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = ({match}) => {
     const classes = useStyles()
-    const [user,setUser] = React.useState({})
+    const [value,setValue] = React.useState({
+        user:{},
+        following:false,
+    })
     const [alert,setAlert] = React.useState({
         error:"",
         redirectToSignIn:false
     })
     let photoUrl = "";
     const jwt = isAuthenticated()
-    photoUrl = user._id ? 
-    `/api/users/photo/${user._id}?${new Date().getTime()}`
+    photoUrl = value.user._id ? 
+    `/api/users/photo/${value.user._id}?${new Date().getTime()}`
     : '/api/users/defaultphoto'
 
     const checkFollow = (user) => {
@@ -64,7 +69,7 @@ const Profile = ({match}) => {
                 })
             }else{
                 let following = checkFollow(data)
-                setUser({...user,...data,following:following})
+                setValue({...value,user:data,following:following})
             }
         })
         return function cleanup(){
@@ -77,11 +82,11 @@ const Profile = ({match}) => {
             userId:jwt.user._id
         },{
             token:jwt.token
-        },user._id).then((data) => {
+        },value.user._id).then((data) => {
             if(data.error){
                 setAlert({...alert,error:data.error})
             }else{
-                setUser({...user,...data,following:!user.following})
+                setValue({...value,user:data,following:!value.following})
             }
         })
     }
@@ -89,15 +94,16 @@ const Profile = ({match}) => {
     if(alert.redirectToSignIn){
         return <Redirect to="/signin" />
     }
-    if(!user._id){
+    if(!(value.user._id)){
         return(
             <div>
-                Still loading
+                Still loading...
             </div>
         )
     }else{
-        console.log(user)
+        console.log(value)
         return (
+            <>
             <Paper className={classes.root} elevation={4}>
                     <Typography variant="h6" className={classes.title}>
                         Profile
@@ -107,33 +113,42 @@ const Profile = ({match}) => {
                             <ListItemAvatar>
                                 <Avatar src={photoUrl} />
                             </ListItemAvatar>
-                            <ListItemText primary={user.name} secondary={user.email}/>
-                            {isAuthenticated().user && isAuthenticated().user._id ==
-                                user._id ? 
+                            <ListItemText primary={value.user.name}
+                             secondary={value.user.email}/>
+                            {jwt.user && jwt.user._id ==
+                                value.user._id ? 
                                 (<ListItemSecondaryAction>
-                                        <Link to={"/user/edit/" + user._id} >
+                                        <Link to={"/user/edit/" + value.user._id} >
                                             <IconButton aria-label="Edit" color="primary" >
                                                 <Edit/>
                                             </IconButton>
                                         </Link>
-                                        <DeleteUser userId={user._id} />
+                                        <DeleteUser userId={value.user._id} />
                                     </ListItemSecondaryAction>
                                 ):(
                                     <FollowProfileButton
                                      onButtonClick={clickFollowButton}
-                                     following={user.following}/>
+                                     following={value.following}/>
                                 )}
                         </ListItem>
                         <Divider/>
                         <ListItem>
-                            <ListItemText primary={user.about}/>
+                            <ListItemText primary={value.user.about}/>
                         </ListItem>
                         <ListItem>
                             <ListItemText primary={"Joined: " + (
-                                new Date(user.created)).toDateString()}/>
+                                new Date(value.user.created)).toDateString()}/>
                         </ListItem>
                     </List>
+                    {/* <ProfileTabs {...user} /> */}
             </Paper>
+            <h3 style={{
+                textAlign:"center",
+                fontWeight:"400",
+                fontSize:"2em"
+            }} >People You Can Follow</h3>
+            {/* <FindPeople/> */}
+            </>
             )
     }
 }
