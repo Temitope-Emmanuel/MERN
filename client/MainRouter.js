@@ -13,7 +13,7 @@ import EditProfile from "./user/EditProfile"
 
 const MainRouter = () => {
     return(
-        <div>
+        <>
             <Menu/>
             <Switch>
                 <Route exact path="/users" component={Users} />
@@ -24,7 +24,7 @@ const MainRouter = () => {
                 <Route exact path="/" component={Home} />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>
-        </div>
+        </>
     )
 }
 

@@ -12,6 +12,8 @@ import React from "react"
 import ReactDOMServer from "react-dom/server"
 import StaticRouter from "react-router-dom/StaticRouter"
 import MainRouter from "../client/MainRouter"
+import {ServerStyleSheets,ThemeProvider} from "@material-ui/styles"
+import theme from "../client/theme"
 
 import userRoutes from "./routes/user.routes"
 import authRoutes from "./routes/auth.routes"
@@ -45,7 +47,32 @@ app.get("/",(req,res) => {
 })
 
 app.get("*",(req,res) => {
-    return res.redirect(302,"/")
+    // Upon a new Request a new stylesheets is generated
+    const sheets = new ServerStyleSheets()
+    const context = {}
+    // This render a react element to it's initial html form
+    const markup = ReactDOMServer.renderToString(
+        sheets.collect(
+            // This is a stateless router used to sync the
+            // url address on the backend to the frontend
+            <StaticRouter location={req.url}
+             context={context}>
+                {/* This make our styles available to our components */}
+                 <ThemeProvider theme={theme} >
+                     <MainRouter/>
+                 </ThemeProvider>
+            </StaticRouter>
+        )
+    )
+    // Used to check if there is a redirect 
+    if(context.url){
+        return res.redirect(303,context.url)
+    }
+    const css = sheets.toString()
+    res.status(200).send(Template({
+        markup:markup,
+        css:css
+    }))
 })
 
 app.use((err,req,res,next) => {
