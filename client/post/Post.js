@@ -90,7 +90,7 @@ const Post = (props) => {
         }
       })
     }
-    
+    console.log(values)
     return(
       <Card className={classes.card}>
         <CardHeader

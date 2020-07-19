@@ -83,15 +83,34 @@ export const like = async(params,credentials,postId) => {
 export const unlike = async(params,credentials,postId) => {
     try{
         let response = await fetch('/api/posts/unlike',{
-            method:'DELETE',
+            method:'PUT',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json',
                 'Authorization':`Bearer ${credentials.token}`
             },
             body:JSON.stringify({
-                userId:params.userId,postId:postId
+                userId:params.userId,postId
             })           
+        })
+        return await response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const comment = async (params,credentials,postId,comment) => {
+    try{
+        let response = await fetch('/api/posts/comment',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${credentials.token}`
+            },
+            body:JSON.stringify({
+                userId:params.userId,postId,comment
+            })
         })
         return await response.json()
     }catch(err){

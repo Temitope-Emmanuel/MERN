@@ -61,7 +61,6 @@ const NewsFeed = (props) => {
         removePost.splice(idx,1)
         setPost(removePost)
     }
-    console.log(posts)
     
     return(
         <Card className={classes.card}>
