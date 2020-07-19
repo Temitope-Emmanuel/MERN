@@ -15,7 +15,7 @@ import Divider from '@material-ui/core/Divider'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from './../auth/auth-helper'
-import {remove} from './api-post.js'
+import {remove,like,unlike} from './api-post.js'
 // import Comments from './Comments'
 
 const useStyles = makeStyles(theme => ({
@@ -53,10 +53,13 @@ const Post = (props) => {
     const classes = useStyles()
     const jwt = isAuthenticated()
 
+    const checkLike = (likes) => {
+      return likes.indexOf(jwt.user._id) !== -1
+    }
     const [values,setValues] = useState({
-      like:null,
-      likes:null,
-      comments:null
+      like:checkLike(props.post.likes),
+      likes:props.post.likes.length,
+      comments:props.post.comments
     })
     const deletePost = () => {
       remove({
@@ -68,6 +71,22 @@ const Post = (props) => {
           console.log(data.error)
         }else{
           props.onRemove(props.post)
+        }
+      })
+    }
+    const clickLike = () => {
+      let callApi = values.like ? unlike : like
+      callApi({
+        userId:jwt.user._id
+      },{
+        token:jwt.token
+      },props.post._id).then((data) => {
+        if(data.error){
+          console.log(data.error)
+        }else{
+          setValues({...values,
+            like:!values.like,likes:data.likes.length
+          })
         }
       })
     }
@@ -102,7 +121,7 @@ const Post = (props) => {
              </div>
            )}
          </CardContent>
-         {/* <CardActions>
+         <CardActions>
            {
              values.like ? 
              <IconButton color="secondary" onClick={clickLike}
@@ -115,13 +134,13 @@ const Post = (props) => {
              </IconButton>
            }
            <span>{values.likes}</span>
-           <IconButton aria-label="Comment" 
+           {/* <IconButton aria-label="Comment" 
             className={classes.button} color="secondary">
               <CommentIcon/>
            </IconButton>
-          <span>{values.comments.length}</span>
+          <span>{values.comments.length}</span> */}
          </CardActions>
-         <Divider/>
+         {/* <Divider/>
          <Comments comments={values.comments} updateComments={updateComments}
           postId={props.post._id} /> */}
       </Card>
