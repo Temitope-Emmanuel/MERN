@@ -15,6 +15,21 @@ export const listNewsFeed = async (params,credential,signal) => {
         console.log(err)        
     }
 }
+export const listByUser = async (params,credentials) => {
+    try{
+        let response = await fetch(`/api/posts/by/${params.userId}`,{
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${credentials.token}`
+            }
+        })
+        return await response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
 export const create = async (params,credentials,post) => {
     try{
         let response = await fetch(`/api/posts/new/${params.userId}`,{
@@ -24,6 +39,40 @@ export const create = async (params,credentials,post) => {
                 'Authorization':`Bearer ${credentials.token}`
             },
             body:post
+        })
+        return await response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+export const remove = async (params,credentials) => {
+    console.log("called succesfully")
+    try{
+        let response = await fetch(`/api/posts/${params.postId}`,{
+            method:"DELETE",
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${credentials.token}`
+            }
+        })
+        return await response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+export const like = async(params,credentials,postId) => {
+    try{
+        let response = await fetch('/api/posts/like/',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${credential.token}`
+            },
+            body:JSON.stringify({
+                userId:params.userId,postId:postId
+            })
         })
         return await response.json()
     }catch(err){

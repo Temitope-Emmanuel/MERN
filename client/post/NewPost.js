@@ -95,7 +95,7 @@ const NewPost = (props) => {
                 setAlert({...alert,error:data.error})
             }else{
                 setValues({...values,text:'',photo:""})
-                // props.addUpdate(data)
+                props.addUpdate(data)
             }
         })
     }
@@ -132,7 +132,7 @@ const NewPost = (props) => {
                           </IconButton>
                       </label>
                       <span className={classes.filename}>
-                          {values.photo && values.photo.name}
+                          {values.photo ? values.photo.name : "Select Image to upload for Post"}
                       </span>
                       {
                           values.error && (

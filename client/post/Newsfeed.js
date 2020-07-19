@@ -53,13 +53,13 @@ const NewsFeed = (props) => {
     const addPost = (post) => {
         const updatedPosts = [...posts]
         updatedPosts.unshift(post)
-        setPosts(updatedPosts)
+        setPost(updatedPosts)
     }
     const removePost = (post) => {
         const removePost = [...posts]
-        const idx = updatedPosts.indexOf(post)
-        updatedPosts.splice(idx,1)
-        setPosts(updatedPosts)
+        const idx = removePost.indexOf(post)
+        removePost.splice(idx,1)
+        setPost(removePost)
     }
     console.log(posts)
     

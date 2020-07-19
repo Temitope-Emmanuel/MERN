@@ -14,8 +14,8 @@ import CommentIcon from '@material-ui/icons/Comment'
 import Divider from '@material-ui/core/Divider'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
-// import {remove, like, unlike} from './api-post.js'
 import {isAuthenticated} from './../auth/auth-helper'
+import {remove} from './api-post.js'
 // import Comments from './Comments'
 
 const useStyles = makeStyles(theme => ({
@@ -48,3 +48,89 @@ const useStyles = makeStyles(theme => ({
    margin: theme.spacing(1),
   }
 }))
+
+const Post = (props) => {
+    const classes = useStyles()
+    const jwt = isAuthenticated()
+
+    const [values,setValues] = useState({
+      like:null,
+      likes:null,
+      comments:null
+    })
+    const deletePost = () => {
+      remove({
+        postId:props.post._id
+      },{
+        token:jwt.token
+      }).then((data) => {
+        if(data.error){
+          console.log(data.error)
+        }else{
+          props.onRemove(props.post)
+        }
+      })
+    }
+    
+    return(
+      <Card className={classes.card}>
+        <CardHeader
+         avatar={
+           <Avatar src={`/api/users/photo/${props.post.postedBy._id}`} />
+         }
+         action={props.post.postedBy._id === jwt.user._id &&
+        <IconButton onClick={deletePost}>
+          <DeleteIcon/>
+        </IconButton>}
+        title={
+          <Link to={`/user/${props.post.postedBy._id}`}>
+            {props.post.postedBy.name}
+          </Link>
+        }
+        subheader={(new Date(props.post.created)).toDateString()}
+        className={classes.cardHeader}
+         />
+         <CardContent className={classes.cardContent} > 
+         <Typography component="p" className={classes.text} >
+           {props.post.text}
+         </Typography>
+         {
+           props.post.photo && (
+             <div className={classes.photo} >
+               <img src={`/api/posts/photo/${props.post._id}`}
+                className={classes.media} />
+             </div>
+           )}
+         </CardContent>
+         {/* <CardActions>
+           {
+             values.like ? 
+             <IconButton color="secondary" onClick={clickLike}
+              className={classes.button} aria-label="Like" >
+               <FavoriteIcon/>
+             </IconButton> : 
+             <IconButton aria-label="Unlike" onClick={clickLike}
+              className={classes.button} color="secondary" >
+                <FavoriteBorderIcon/>
+             </IconButton>
+           }
+           <span>{values.likes}</span>
+           <IconButton aria-label="Comment" 
+            className={classes.button} color="secondary">
+              <CommentIcon/>
+           </IconButton>
+          <span>{values.comments.length}</span>
+         </CardActions>
+         <Divider/>
+         <Comments comments={values.comments} updateComments={updateComments}
+          postId={props.post._id} /> */}
+      </Card>
+    )
+}
+
+Post.propsTypes = {
+  post:PropTypes.object.isRequired,
+  onRemove:PropTypes.func.isRequired
+}
+
+export default Post
