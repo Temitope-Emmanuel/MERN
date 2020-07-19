@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from './../auth/auth-helper'
 import {remove,like,unlike} from './api-post.js'
-// import Comments from './Comments'
+import Comments from './Comments'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -90,7 +90,9 @@ const Post = (props) => {
         }
       })
     }
-    console.log(values)
+    const updateComments = (comments) => {
+      setValues({...values,comments})
+    }
     return(
       <Card className={classes.card}>
         <CardHeader
@@ -134,15 +136,16 @@ const Post = (props) => {
              </IconButton>
            }
            <span>{values.likes}</span>
-           {/* <IconButton aria-label="Comment" 
+           <IconButton aria-label="Comment" 
             className={classes.button} color="secondary">
               <CommentIcon/>
            </IconButton>
-          <span>{values.comments.length}</span> */}
+          <span>{values.comments.length}</span>
          </CardActions>
-         {/* <Divider/>
-         <Comments comments={values.comments} updateComments={updateComments}
-          postId={props.post._id} /> */}
+         <Divider/>
+         <Comments comments={values.comments}
+          updateComments={updateComments}
+          postId={props.post._id} />
       </Card>
     )
 }

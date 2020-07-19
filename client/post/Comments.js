@@ -63,10 +63,43 @@ const Comments = (props) => {
             })
         }
     }
+    const deleteComment = comment => evt => {
+        uncomment({
+            userId:jwt.user._id
+        },{
+            token:jwt.token
+        },props.postId,comment).then((data) => {
+            if(data.error){
+                console.log(data.error)
+            }else{
+                props.updateComments(data.comments)
+            }
+        })
+    }
+    const commentBody = item => {
+        return(
+            <p className={classes.commentText}>
+                <Link to={`/user/${item.postedBy._id}`} >
+                    {item.postedBy.name}
+                </Link> <br/>
+                {item.text}
+                <span className={classes.commentDate}>
+                    {(new Date(item.created)).toDateString()} |
+                    {jwt.user._id === item.postedBy._id &&
+                    <Icon className={classes.commentDelete}
+                     onClick={deleteComment(item)}>
+                         delete
+                    </Icon>
+                    }
+                </span>
+            </p>
+        )
+    }
 
 
     return(
-        <CardHeader avatar={
+        <div>
+            <CardHeader avatar={
             <Avatar
             src={`/spi/users/photo/${jwt.user._id}`}
             className={classes.smallAvatar} />
@@ -81,5 +114,26 @@ const Comments = (props) => {
             margin="normal"
             />
         } className={classes.cardHeader} />
-    )
+        {props.comments.map((item,i) => {
+            return(
+                <CardHeader 
+                 avatar={
+                     <Avatar className={classes.smallAvatar}
+                     src={`/api/users/photo${item.postedBy._id}`}
+                     />
+                    } title={commentBody(item)} key={i}
+                      className={classes.cardHeader}
+                    />
+            )
+        })}
+        </div>
+        )
 }
+
+Comments.propTypes = {
+    postId:PropTypes.string.isRequired,
+    comments:PropTypes.array.isRequired,
+    updateComments:PropTypes.func.isRequired
+}
+
+export default Comments

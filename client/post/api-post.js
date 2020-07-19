@@ -109,7 +109,26 @@ export const comment = async (params,credentials,postId,comment) => {
                 'Authorization':`Bearer ${credentials.token}`
             },
             body:JSON.stringify({
-                userId:params.userId,postId,comment
+                userId:params.userId,postId,comment:comment
+            })
+        })
+        return await response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const uncomment = async(params,credentials,postId,comment) => {
+    try{
+        let response = await fetch('/api/posts/uncomment',{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${credentials.token}`
+            },
+            body: JSON.stringify({
+                userId:params.userId, postId: postId, comment: comment
             })
         })
         return await response.json()
