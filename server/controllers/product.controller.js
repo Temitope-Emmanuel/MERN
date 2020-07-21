@@ -31,4 +31,52 @@ const create = (req, res, next) => {
   })
 }
 
-export default {create}
+const listByShop = async (req, res) => {
+    try {
+        // Query the database for product of a specific shop 
+        // Does not return the image
+      let products = await Product.find({shop: req.shop._id})
+      .populate('shop', '_id name').select('-image')
+      res.json(products)
+    } catch (err) {
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+    }
+}
+
+const photo = (req, res, next) => {
+    if(req.product.image.data){
+      res.set("Content-Type", req.product.image.contentType)
+      return res.send(req.product.image.data)
+    }
+    next()
+}
+
+const defaultPhoto = (req, res) => {
+    return res.sendFile(process.cwd()+defaultImage)
+}
+
+const productByID = async (req, res, next, id) => {
+    try {
+      let product = await Product.findById(id).populate('shop', '_id name').exec()
+      if (!product)
+        return res.status('400').json({
+          error: "Product not found"
+        })
+      req.product = product
+      next()
+    } catch (err) {
+      return res.status('400').json({
+        error: "Could not retrieve product"
+      })
+    }
+  }
+  
+  
+  
+
+export default {
+    create,listByShop,defaultPhoto,
+    productByID,photo
+}
