@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import {create} from './api-product.js'
 import {read} from '../shop/api-shop'
 import {isAuthenticated} from './../auth/auth-helper'
+import Chips from "./Chip"
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -77,6 +79,7 @@ const NewProduct = ({match}) => {
             }
         })
     },[match.params.shopId])
+
     React.useEffect(() => {
         const isSubmit = isValid()
         setAlert({...alert,submit:!isSubmit})
@@ -94,6 +97,9 @@ const NewProduct = ({match}) => {
           ? event.target.files[0]
           : event.target.value
         setValues({...values,  [name]: value })
+      }
+      const setDescription = (value) => {
+        setValues({...values,category:value})
       }
       const clickSubmit = () => {
         let productData = new FormData()
@@ -149,10 +155,6 @@ const NewProduct = ({match}) => {
               onChange={handleChange('description')}
               className={classes.textField} margin="normal"
             /><br/>
-            <TextField id="category" label="Category"
-             className={classes.textField} value={values.category}
-              onChange={handleChange('category')} margin="normal"/>
-              <br/>
             <TextField id="quantity" label="Quantity"
               className={classes.textField} value={values.quantity}
               onChange={handleChange('quantity')} type="number"
@@ -160,8 +162,10 @@ const NewProduct = ({match}) => {
             <br/>
             <TextField id="price" label="Price"
              className={classes.textField} value={values.price}
-              onChange={handleChange('price')} type="number"
-               margin="normal"/>
+             onChange={handleChange('price')} type="number"
+             margin="normal"/>
+             <br/>
+              <Chips onChange={setDescription} />
             <br/>
             {
               alert.error && (<Typography component="p"

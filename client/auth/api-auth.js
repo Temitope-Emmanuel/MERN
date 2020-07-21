@@ -22,7 +22,7 @@ const signout = async () => {
         let response = await fetch('/auth/signout/',{
             method:'GET'
         })
-        return await response.json()
+        return response.json()
     }catch(err){
         console.log(err)
     }
