@@ -18,6 +18,7 @@ import theme from "../client/theme"
 import userRoutes from "./routes/user.routes"
 import authRoutes from "./routes/auth.routes"
 import shopRoutes from "./routes/shop.routes"
+import productRoutes from "./routes/product.routes"
 
 import devBundle from './devBundle'
 
@@ -41,6 +42,7 @@ app.use(cors())
 app.use("/",userRoutes)
 app.use("/",authRoutes)
 app.use("/",shopRoutes)
+app.use("/",productRoutes)
 
 app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
     'dist')))

@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import {Link} from "react-router-dom"
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
+import Products from './../product/Products'
 import {read} from './api-shop.js'
-// import Products from './../product/Products'
-// import {listByShop} from './../product/api-product.js'
+import {listByShop} from './../product/api-product.js'
+import {isAuthenticated} from "../auth/auth-helper"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,10 +45,12 @@ const useStyles = makeStyles(theme => ({
 
 
 const Shop = ({match}) => {
-    const [shop,setShop] = useState('')
+    const [shop,setShop] = useState({})
+    const [products,setProducts] = useState([])
     const [error,setError] = useState('')
     const classes = useStyles()
-    
+    const jwt = isAuthenticated()
+
     useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
@@ -63,11 +68,32 @@ const Shop = ({match}) => {
         }
     }, [match.params.shopId]
     )
+
+    useEffect(() => {
+      const abortController = new AbortController()
+      const signal = abortController.signal
+
+      listByShop({
+        shopId:match.params.shopId
+      },signal).then((data) => {
+        if(data.error){
+          setError(data.error)
+        }else{
+          setProducts(data)
+        }
+      })
+      return function cleanup(){
+        abortController.abort()
+      }
+    },[match.params.shopId]
+    )
+
     const logoUrl = shop._id
           ? `/api/shops/logo/${shop._id}?${new Date().getTime()}`
           : '/api/shops/defaultphoto'
-    
-    return (<div className={classes.root}>
+          const isOwner = shop.owner?._id ===jwt.user?._id
+    return (
+    <div className={classes.root}>
       <Grid container spacing={8}>
         <Grid item xs={4} sm={4}>
           <Card className={classes.card}>
@@ -79,8 +105,26 @@ const Shop = ({match}) => {
               <Avatar src={logoUrl} className={classes.bigAvatar}/><br/>
                 <Typography type="subheading" component="h2" className={classes.subheading}>
                   {shop.description}
-                </Typography><br/>
+                </Typography>
+                <br/>
+                <Button>
+                  {
+                    isOwner &&
+                  <Link to={`/seller/${shop._id}/products/new`}>
+                    Add Product
+                  </Link>
+                  }
+                </Button>
             </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={8} sm={8}>
+          <Card>
+          <Typography type="title" component="h2"
+           className={classes.productTitle}>
+             Products
+          </Typography>
+            <Products products={products} searched={false}/>
           </Card>
         </Grid>
        </Grid>

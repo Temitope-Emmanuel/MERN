@@ -53,7 +53,6 @@ const Shops = () => {
       if (data.error) {
         console.log(data.error)
       } else {
-        console.log("This is the data",data)
         setShops(data)
       }
     })

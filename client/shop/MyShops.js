@@ -13,6 +13,7 @@ import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Edit from '@material-ui/icons/Edit'
+import Add from '@material-ui/icons/Add'
 import Divider from '@material-ui/core/Divider'
 import {isAuthenticated} from './../auth/auth-helper'
 import {listByOwner} from './api-shop.js'
@@ -99,6 +100,11 @@ const MyShops = () => {
                       <Button aria-label="Orders" color="primary">
                         View Orders
                       </Button>
+                    </Link>
+                    <Link to={`/seller/${shop._id}/products/new`}>
+                      <IconButton aria-label="Edit" color="primary">
+                        <Add/>
+                      </IconButton>
                     </Link>
                     <Link to={"/seller/shop/edit/" + shop._id}>
                       <IconButton aria-label="Edit" color="primary">

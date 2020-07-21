@@ -20,6 +20,7 @@ router.route('/api/shop/:shopId')
       .get(shopCtrl.read)
       .put(authCtrl.requireSignin,shopCtrl.isOwner,
         shopCtrl.update)
+        .delete(authCtrl.requireSignin,shopCtrl.isOwner,shopCtrl.remove)
 
 // Getting the pictures for a shop
 router.route('/api/shops/logo/:shopId')
