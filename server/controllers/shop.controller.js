@@ -89,11 +89,53 @@ const read = (req, res) => {
     req.shop.image = undefined
     return res.json(req.shop)
 }
+
+// Verify if the current is able to muatate the specified shop
+const isOwner = (req, res, next) => {
+    console.log("we are checking the validity")
+    const isOwner = req.shop?.owner._id == req.auth?._id
+    if(!isOwner){
+      return res.status('403').json({
+        error: "User is not authorized"
+      })
+    }
+    console.log("success")
+    next()
+}
+
+const update = (req, res) => {
+    let form = new formidable.IncomingForm()
+    form.keepExtensions = true
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        res.status(400).json({
+          message: "Photo could not be uploaded"
+        })
+      }
+      let shop = req.shop
+      shop = extend(shop, fields)
+      shop.updated = Date.now()
+      if(files.image){
+        shop.image.data = fs.readFileSync(files.image.path)
+        shop.image.contentType = files.image.type
+      }
+      try {
+        let result = await shop.save()
+        res.json(result)
+      }catch (err){
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+      }
+    })
+}
+  
+  
   
   
 
 
 export default {
-    create,defaultPhoto,read,
-    list,photo,shopByID,listByOwner
+    create,defaultPhoto,read,isOwner,
+    list,photo,shopByID,listByOwner,update
 }
