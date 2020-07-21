@@ -44,6 +44,15 @@ const userByID = async (req,res,next,id) => {
         })
     }
 }
+const isSeller = (req,res,next) => {
+    const isSeller = req.profile?.seller
+    if(!isSeller){
+        return res.status(403).json({
+            error:"User is not a seller"
+        })
+    }
+    next() 
+}
 const read = (req,res) => {
     req.profile.hashed_password = undefined
     req.profile.salt = undefined
@@ -84,4 +93,6 @@ const remove = async (req,res) => {
 }
 
 
-export default {create,userByID,read,list,remove,update}
+export default {
+    create,userByID,read,
+    list,remove,update,isSeller}
