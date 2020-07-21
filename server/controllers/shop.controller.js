@@ -60,7 +60,6 @@ const shopByID = async (req, res, next, id) => {
     }
   }
   
-
 const photo = (req, res, next) => {
     if(req.shop.image.data){
       res.set("Content-Type", req.shop.image.contentType)
@@ -129,6 +128,18 @@ const update = (req, res) => {
       }
     })
 }
+const remove = async (req, res) => {
+  try {
+    let shop = req.shop
+    let deletedShop = shop.remove()
+    res.json(deletedShop)
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err)
+    })
+  }  
+}
+
   
   
   
@@ -136,6 +147,6 @@ const update = (req, res) => {
 
 
 export default {
-    create,defaultPhoto,read,isOwner,
+    create,defaultPhoto,read,isOwner,remove,
     list,photo,shopByID,listByOwner,update
 }
