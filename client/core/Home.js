@@ -2,11 +2,15 @@ import React from "react"
 import {makeStyles} from "@material-ui/core/styles"
 import Card from '@material-ui/core/Card'
 import Box from '@material-ui/core/Box'
+import Grid from '@material-ui/core/Grid'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import unicornbikeImg from './../assets/images/unicornbike.jpg'
 import {Link} from "react-router-dom"
+import Suggestions from "../product/Suggestions"
+import {listLatest} from "../product/api-product"
+
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -32,25 +36,37 @@ const useStyles = makeStyles(theme => ({
 
 const Home = () => {
     const classes = useStyles()
+    const [suggestions,setSuggestions] = React.useState([])
+
+    React.useEffect(() => {
+        const abortController = new AbortController()
+        const signal = abortController.signal
+        listLatest(signal).then((data) => {
+            if(data.error){
+                console.log(data.error)
+            }else{
+                setSuggestions(data)
+            }
+        })
+        return function cleanup(){
+            abortController.abort()
+        }
+    },[])
     return(
-        <Card className={classes.card}>
-            <Typography variant="h6" className={classes.title} >
-                Home Page
-            </Typography>
-            <CardMedia className={classes.media}
-            image={unicornbikeImg} title="Unicorn Bicycle"/>
-            <CardContent>
-                <Typography variant="body2" component="p" >
-                    Welcome to the MERN Skeleton home page
-                </Typography>
-            </CardContent>
-            <Box className={classes.linkContainer}>
-            <Link to="/users" >Users</Link>
-            <Link to="/signup" >Signup</Link>
-            <Link to="/signin" >Signin</Link>
-            </Box>
-        </Card>
-    )
+        <div className={classes.root}>
+            <Grid container spacing={2} >
+                <Grid item xs={6} sm={6}>
+                {/* <Search  />
+                <Categories/> */}
+                </Grid>
+                <Grid item xs={6} sm={6} >
+                    <Suggestions products={suggestions}
+                    title={"Latest Products"}
+                     />
+                </Grid>
+            </Grid>
+        </div>
+      )
 }
 
 export default Home

@@ -42,3 +42,27 @@ export const remove = async (params) => {
         console.log(err)
     }
 }
+
+export const listLatest = async (signal) => {
+    try{
+        let response = await fetch('/api/products/latest',{
+            method:'GET',
+            signal
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const listRelated = async (params,signal) => {
+    try{
+        let response = await fetch(`/api/products/related/${params.productId}`,{
+            method:'GET',
+            signal
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}

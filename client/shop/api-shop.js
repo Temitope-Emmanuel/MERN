@@ -71,6 +71,7 @@ export const update = async (params,body) => {
   }
 }
 export const remove = async(params) => {
+  console.log("successfully called ",params)
   try{
     const response = await fetch(`/api/shop/${params.shopId}`,{
       method:'DELETE',

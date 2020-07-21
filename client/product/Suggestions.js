@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
   title: {
     margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
     color: theme.palette.openTitle,
-    fontSize: '1.1em'
+    fontSize: '1.1em',
+    textAlign:"right"
   },
   viewButton: {
     verticalAlign: 'middle'
@@ -102,17 +103,17 @@ const Suggestion = (props) => {
                                                  {item.name}
                                             </Typography>
                                         </Link>
-                                        <Link to={`/shops/${item.sjop._id}`}>
+                                        <Link to={`/shops/${item.shop._id}`}>
                                             <Typography type="subheading"
                                              className={classes.subheading} >
-                                                 <Icon className={classes.icon}>
+                                                 {/* <Icon className={classes.icon}>
                                                      shopping_basket
-                                                 </Icon>
+                                                 </Icon> */}
                                                  {item.shop.name}
                                             </Typography>
                                         </Link>
                                         <Typography component="p" className={classes.date} >
-                                            Added on{(new Date(item.create)).toDateString()}
+                                            Added on{(new Date(item.created)).toDateString()}
                                         </Typography>
                                     </CardContent>
                                     <div className={classes.controls}>
@@ -126,11 +127,12 @@ const Suggestion = (props) => {
                                                     <ViewIcon className={classes.iconButton} />
                                                 </IconButton>
                                             </Link>
-                                            <AddToCart item={item} />
+                                            {/* <AddToCart item={item} /> */}
                                         </span>
                                     </div>
                                 </div>
                             </Card>
+                            <Divider/>
                         </span>
                     ))
                 }
@@ -139,7 +141,7 @@ const Suggestion = (props) => {
     )
 }
 
-Suggestions.propTypes = {
+Suggestion.propTypes = {
     products:PropTypes.array.isRequired,
     title:PropTypes.string.isRequired
 }
