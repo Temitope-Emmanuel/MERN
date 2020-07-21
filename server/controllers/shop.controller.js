@@ -32,7 +32,50 @@ const create = (req, res) => {
   })
 }
 
+// Listing  all available shops
+const list = async (req, res) => {
+    try {
+      let shops = await Shop.find()
+      res.json(shops)
+    } catch (err){
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+    }
+}
+
+const shopByID = async (req, res, next, id) => {
+    try {
+      let shop = await Shop.findById(id).populate('owner', '_id name').exec()
+      if (!shop)
+        return res.status('400').json({
+          error: "Shop not found"
+        })
+      req.shop = shop
+      next()
+    } catch (err) {
+      return res.status('400').json({
+        error: "Could not retrieve shop"
+      })
+    }
+  }
+  
+
+const photo = (req, res, next) => {
+    if(req.shop.image.data){
+      res.set("Content-Type", req.shop.image.contentType)
+      return res.send(req.shop.image.data)
+    }
+    next()
+  }
+  const defaultPhoto = (req, res) => {
+    return res.sendFile(process.cwd()+defaultImage)
+  }
+  
+  
+
 
 export default {
-    create
+    create,defaultPhoto,
+    list,photo,shopByID
 }
