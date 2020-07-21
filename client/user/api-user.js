@@ -27,7 +27,7 @@ export const create = async (user) => {
     }
   }
   
-  const read = async (params, credentials, signal) => {
+  const read = async (params, signal) => {
     try {
       let response = await fetch('/api/user/' + params.userId, {
         method: 'GET',
@@ -35,7 +35,7 @@ export const create = async (user) => {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + credentials.token
+          'Authorization': 'Bearer ' + params.token
         }
       })
       return await response.json()
@@ -44,14 +44,14 @@ export const create = async (user) => {
     }
   }
   
-  const update = async (params, credentials, user) => {
+  const update = async (params, user) => {
     try {
       let response = await fetch('/api/user/' + params.userId, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + credentials.token
+          'Authorization': 'Bearer ' + params.token
         },
         body: JSON.stringify(user)
       })

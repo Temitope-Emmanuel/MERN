@@ -15,6 +15,13 @@ const isActive = (history,path) => {
     else
        return {color:"#ffffff"}
 }
+const isPartActive = (history, path) => {
+    if (history.location.pathname.includes(path))
+      return {color: '#bef67a'}
+    else
+      return {color: '#ffffff'}
+  }
+  
 
 const Menu = ({history}) => (
     <AppBar position="static" >
@@ -33,6 +40,11 @@ const Menu = ({history}) => (
                     Users
                 </Button>
             </Link>
+            <Link to="/shops/all" >
+                <Button style={isActive(history,"/shops/all")} >
+                    View Shops
+                </Button>
+            </Link>
             {(!isAuthenticated()) && (
                 <>
                     <Link to="/signup" >
@@ -48,20 +60,22 @@ const Menu = ({history}) => (
                 </>
             )}
             {
-                isAuthenticated() && (
-                <>
-                    <Link to={"/user/" + isAuthenticated().user._id}>
-                        <Button style={isActive(history, "/user/"+isAuthenticated().user._id)}>
-                            My Profile
-                        </Button>
-                    </Link>
-                    <Button color="inherit"
-                        onClick={() => {clearJWT(() => history.push('/')) }}>
-                        Sign out
-                    </Button>
-                </>)
-            }
-        </Toolbar>
+        isAuthenticated() && (<span>
+          {isAuthenticated().user.seller && (
+          <Link to="/seller/shops">
+              <Button style={isPartActive(history, "/seller/")}>
+                  My Shops
+                </Button>
+          </Link>)}
+          <Link to={"/user/" + isAuthenticated().user._id}>
+            <Button style={isActive(history, "/user/"+isAuthenticated().user._id)}>My Profile</Button>
+          </Link>
+          <Button color="inherit" onClick={() => {
+              auth.clearJWT(() => history.push('/'))
+            }}>Sign out</Button>
+        </span>)
+      }
+      </Toolbar>
     </AppBar>
 )
 

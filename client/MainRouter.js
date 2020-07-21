@@ -10,6 +10,11 @@ import SignIn from "./auth/Signin"
 import Profile from "./user/Profile"
 import EditProfile from "./user/EditProfile"
 
+import NewShop from "./shop/NewShop"
+import Shops from "./shop/Shops"
+import MyShops from "./shop/MyShops"
+import Shop from "./shop/Shop"
+import EditShop from "./shop/EditShop"
 
 const MainRouter = () => {
     return(
@@ -20,7 +25,12 @@ const MainRouter = () => {
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/signin" component={SignIn} />
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+                <PrivateRoute path="/seller/shop/new" component={NewShop} />
+                <PrivateRoute path="/seller/shop/edit/:shopId" component={EditShop}/>
+                <PrivateRoute path="/seller/shops" component={MyShops} />
                 <Route exact path="/user/:userId" component={Profile} />
+                <Route exact path="/shops/all" component={Shops} />
+                <Route exact path="/shops/:shopId" component={Shop} />
                 <Route exact path="/" component={Home} />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>

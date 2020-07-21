@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider'
 import DeleteUser from './DeleteUser'
 import {read} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
+import NewShop from "../shop/NewShop"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -35,15 +36,16 @@ const Profile = ({match}) => {
     const classes = useStyles()
     const [user,setUser] = React.useState({})
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
+    const jwt = isAuthenticated()
 
     React.useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
-        const jwt = isAuthenticated()
         read({
-            userId:match.params.userId
-        },
-        {token:jwt.token},signal).then((data) => {
+            userId:match.params.userId,
+            token:jwt.token
+        }
+        ,signal).then((data) => {
             if(data && data.error){
                 setRedirectToSignIn(true)
             }else{
@@ -58,8 +60,9 @@ const Profile = ({match}) => {
     if(redirectToSignIn){
         return <Redirect to="/signin" />
     }
-
+    console.log(jwt.user.seller)
     return (
+        <>
         <Paper className={classes.root} elevation={4}>
                 <Typography variant="h6" className={classes.title}>
                     Profile
@@ -72,7 +75,7 @@ const Profile = ({match}) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={user.name} secondary={user.email}/>
-                        {isAuthenticated().user && isAuthenticated().user._id ==
+                        {jwt.user?._id ==
                             user._id && 
                             (<ListItemSecondaryAction>
                                     <Link to={"/user/edit/" + user._id} >
@@ -90,6 +93,8 @@ const Profile = ({match}) => {
                     </ListItem>
                 </List>
         </Paper>
+        {jwt.user.seller && <NewShop/> }
+        </>
         )
 }
 

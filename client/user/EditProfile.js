@@ -7,13 +7,15 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Icon from '@material-ui/core/Icon'
 import { makeStyles } from '@material-ui/core/styles'
-import {isAuthenticated} from './../auth/auth-helper'
+import {isAuthenticated,updateUser} from './../auth/auth-helper'
 import {read, update} from './api-user.js'
 import {Redirect} from 'react-router-dom'
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
 
 
 const useStyles = makeStyles(theme => ({
@@ -39,20 +41,26 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: 'auto',
     marginBottom: theme.spacing(2)
+  },
+  subheading: {
+    marginTop: theme.spacing(2),
+    color: theme.palette.openTitle
   }
 }))
 
 const EditProfile = ({ match }) => {
   const classes = useStyles()
   const [values, setValues] = useState({
-    name: '',
-    password: '',
-    email: ''
+    name:"",
+    password: "",
+    email: "",
+    seller:false
   })
 
   const [alert,setAlert] = useState({
     open: false,
     error: '',
+    userId:"",
     redirectToProfile: false
   })
 
@@ -68,8 +76,9 @@ const EditProfile = ({ match }) => {
     const signal = abortController.signal
 
     read({
-      userId: match.params.userId
-    }, {token: jwt.token}, signal).then((data) => {
+      userId: match.params.userId,
+      token: jwt.token
+    }, signal).then((data) => {
       if (data && data.error) {
         setAlert({...alert, error: data.error})
       } else {
@@ -84,15 +93,18 @@ const EditProfile = ({ match }) => {
 
   const clickSubmit = () => {
     update({
-      userId: match.params.userId
-    }, {
+      userId: match.params.userId,
       token: jwt.token
-    }, {...values}).then((data) => {
+    }
+    ,{...values}).then((data) => {
         console.log(data)
       if (data && data.error) {
         setAlert({...alert, error: data.error})
       } else {
-        setValues({...values, userId: data._id, redirectToProfile: true})
+        setAlert({...alert,redirectToProfile:true})
+          updateUser(data, ()=>{
+            setAlert({...alert, userId: data._id, redirectToProfile: true})
+          })
       }
     })
   }
@@ -100,9 +112,13 @@ const EditProfile = ({ match }) => {
   const handleChange = name => event => {
     setValues({...values, [name]: event.target.value})
   }
+  const handleCheck = (event, checked) => {
+    setValues({...values, 'seller': checked})
+  }
+
   
-    if (values.redirectToProfile) {
-      return (<Redirect to={'/user/' + values.userId}/>)
+    if (alert.redirectToProfile) {
+      return (<Redirect to={'/user/' + alert.userId}/>)
     }
 
     return (
@@ -124,6 +140,20 @@ const EditProfile = ({ match }) => {
                 </InputAdornment>
             }} 
             />
+            <Typography variant="subtitle1" className={classes.subheading}>
+                    Seller Account
+            </Typography>
+            <FormControlLabel
+                control={
+                      <Switch classes={{
+                                checked: classes.checked,
+                                bar: classes.bar,
+                              }}
+                      checked={values.seller}
+                      onChange={handleCheck}
+                 />}
+                 label={values.seller? 'Active' : 'Inactive'}
+             />
           <br/> {
             alert.error && (<Typography component="p" color="error">
               {/* <Icon color="error" className={classes.error}>error</Icon> */}
