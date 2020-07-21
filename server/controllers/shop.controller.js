@@ -84,11 +84,16 @@ const listByOwner = async (req, res) => {
     })
     }
 }
+// Query specific shop
+const read = (req, res) => {
+    req.shop.image = undefined
+    return res.json(req.shop)
+}
   
   
 
 
 export default {
-    create,defaultPhoto,
+    create,defaultPhoto,read,
     list,photo,shopByID,listByOwner
 }
