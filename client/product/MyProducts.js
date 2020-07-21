@@ -105,7 +105,7 @@ const MyProducts = (props) => {
                     </Typography>
                   </div>
                   <ListItemSecondaryAction>
-                    <Link to={"/seller/"+product.shop._id+"/"+product._id+"/edit"}>
+                    <Link to={`/seller/${props.shopId}/${product._id}/edit`}>
                       <IconButton aria-label="Edit" color="primary">
                         <Edit/>
                       </IconButton>

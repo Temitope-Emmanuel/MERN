@@ -110,10 +110,79 @@ const read = (req,res) => {
     })
   }
 }
+const update = (req, res) => {
+  let form = new formidable.IncomingForm()
+  form.keepExtensions = true
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        message: "Photo could not be uploaded"
+      })
+    }
+    let product = req.product
+    product = extend(product, fields)
+    product.updated = Date.now()
+    if(files.image){
+      product.image.data = fs.readFileSync(files.image.path)
+      product.image.contentType = files.image.type
+    }
+    try {
+      let result = await product.save()
+      console.log("successful")
+      res.json(result)
+    }catch (err){
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+    }
+  })
+}
+const remove = async (req, res) => {
+  try{
+    let product = req.product
+    let deletedProduct = await product.remove()
+    res.json(deletedProduct)
+  
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err)
+    })
+  }
+}
+const listCategories = async (req,res) => {
+  try{
+    let products = await Product.distinct('category',{})
+    res.json(products)
+  }catch(err){
+    return  res.status(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+}
+const list = async (req,res) => {
+  const query = {}
+  if(req.query.search){
+    query.name = {'$regex':req.query.search,'$options':'i'}
+  }
+  if(req.query.category && req.query.category != "All"){
+    query.category = req.query.category  
+  }
+  try{
+    let products = await Product.find(query)
+                        .populate('shop','_id name').select('-image').exec()
+    res.json(products)
+  }catch(err){
+    return res.status(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+} 
+
+
   
   
 
 export default {
-    create,listByShop,defaultPhoto,read,
-    productByID,photo,listLatest,listRelated
+    create,listByShop,defaultPhoto,read,update,listCategories,
+    productByID,photo,listLatest,listRelated,remove,list
 }

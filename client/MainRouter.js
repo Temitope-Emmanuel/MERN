@@ -18,6 +18,8 @@ import EditShop from "./shop/EditShop"
 
 import NewProduct from "./product/NewProduct"
 import Product from "./product/Product"
+import EditProduct from "./product/EditProduct"
+
 
 const MainRouter = () => {
     return(
@@ -30,7 +32,8 @@ const MainRouter = () => {
                 <Route exact path="/product/:productId" component={Product} />
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
                 <PrivateRoute path="/seller/shop/new" component={NewShop} />
-                <PrivateRoute path="/seller/shop/edit/:shopId" component={EditShop}/>
+                <PrivateRoute exact path="/seller/:shopId/:productId/edit" component={EditProduct}/>
+                <PrivateRoute exact path="/seller/shop/edit/:shopId" component={EditShop}/>
                 <PrivateRoute path="/seller/:shopId/products/new" component={NewProduct} />
                 <PrivateRoute path="/seller/shops" component={MyShops} />
                 <Route exact path="/user/:userId" component={Profile} />

@@ -1,3 +1,4 @@
+import queryString from 'querystring'
 
 export const create = async (params,product) => {
     try{
@@ -81,3 +82,44 @@ export const listRelated = async (params,signal) => {
         console.log(err)
     }
 }
+export const update = async (params, product) => {
+    console.log("successful calling",params)
+    try {
+      let response = await fetch(`/api/product/${params.shopId}/${params.productId}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + params.token
+        },
+        body: product
+      })
+      return response.json()
+    } catch(err) {
+      console.log(err)
+    }
+}
+
+export const listCategories = async (signal) => {
+    console.log("calling the list category")
+    try{
+        const response = await fetch('/api/products/categories',{
+            method:'GET',
+            signal:signal
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const list = (params) => {
+    const query = queryString.stringify(params)
+
+    return fetch(`/api/products?${query}`,{
+        method:'GET'
+    }).then(response => {
+        return response.json()
+    }).catch((err) => console.log(err))
+}
+  
+  

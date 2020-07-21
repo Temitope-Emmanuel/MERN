@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Link, Redirect} from 'react-router-dom'
+import PropTypes from "prop-types"
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -98,7 +99,7 @@ const NewProduct = ({match}) => {
           : event.target.value
         setValues({...values,  [name]: value })
       }
-      const setDescription = (value) => {
+      const setCategory = (value) => {
         setValues({...values,category:value})
       }
       const clickSubmit = () => {
@@ -165,7 +166,7 @@ const NewProduct = ({match}) => {
              onChange={handleChange('price')} type="number"
              margin="normal"/>
              <br/>
-              <Chips onChange={setDescription} />
+              <Chips onChange={setCategory} />
             <br/>
             {
               alert.error && (<Typography component="p"

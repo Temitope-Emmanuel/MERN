@@ -11,6 +11,7 @@ import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
+import Proptypes from "prop-types"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,24 +78,28 @@ const Chips = (props) => {
       />
       <Chip
         icon={<HomeWorkIcon/>}
-        label="Office & Supplies"
+        label="Office"
         clickable
         color="primary"
         onDelete={handleDelete}
-        onClick={handleLabel("Office & Supplies")}
-        deleteIcon={label === "Office & Supplies" ?<DoneIcon/> : <AddIcon />}
+        onClick={handleLabel("Office")}
+        deleteIcon={label === "Office" ?<DoneIcon/> : <AddIcon />}
       />
-      {/* <Chip
+      <Chip
         icon={<FaceIcon/>}
-        label="Office & Supplies"
+        label="Supplies"
         clickable
         color="primary"
         onDelete={handleDelete}
-        onClick={handleLabel("Technology")}
-        deleteIcon={label === "technology" ?<DoneIcon/> : <AddIcon />}
-      /> */}
+        onClick={handleLabel("Supplies")}
+        deleteIcon={label === "Supplies" ?<DoneIcon/> : <AddIcon />}
+      />
       </Paper>
         </Typography>
   );
+
+  Chips.propTypes = {
+    onChange:Proptypes.func.isRequired
+  }
 }
 export default Chips
