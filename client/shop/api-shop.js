@@ -70,4 +70,18 @@ export const update = async (params,body) => {
     console.log(err)
   }
 }
+export const remove = async(params) => {
+  try{
+    const response = await fetch(`/api/shop/${params.shopId}`,{
+      method:'DELETE',
+      headers:{
+        'Accept':'application/json',
+        Authorization:`Bearer ${params.token}`
+      }
+    })
+    return response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
   

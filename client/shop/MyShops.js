@@ -16,7 +16,7 @@ import Edit from '@material-ui/icons/Edit'
 import Divider from '@material-ui/core/Divider'
 import {isAuthenticated} from './../auth/auth-helper'
 import {listByOwner} from './api-shop.js'
-// import DeleteShop from './DeleteShop'
+import DeleteShop from './DeleteShop'
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -85,7 +85,7 @@ const MyShops = () => {
         </Typography>
         <List dense>
         {shops.map((shop, i) => {
-            return   <Link to={"/shops/"+shop._id} key={i}>
+            return   <span key={i}>
               <ListItem button>
                 <ListItemAvatar>
                   <Avatar
@@ -105,12 +105,12 @@ const MyShops = () => {
                         <Edit/>
                       </IconButton>
                     </Link>
-                    {/* <DeleteShop shop={shop} onRemove={removeShop}/> */}
+                    <DeleteShop shop={shop} onRemove={removeShop}/>
                   </ListItemSecondaryAction>)
                 }
               </ListItem>
               <Divider/>
-            </Link>})}
+            </span>})}
         </List>
       </Paper>
     </div>)
