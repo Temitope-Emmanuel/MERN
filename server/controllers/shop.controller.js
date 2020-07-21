@@ -70,12 +70,25 @@ const photo = (req, res, next) => {
   }
   const defaultPhoto = (req, res) => {
     return res.sendFile(process.cwd()+defaultImage)
-  }
+}
+
+// For Find shops created by a particular user
+const listByOwner = async (req, res) => {
+    try {
+    let shops = await Shop.find({owner:
+    req.profile._id}).populate('owner', '_id name')
+    res.json(shops)
+    } catch (err){
+    return res.status(400).json({
+    error: errorHandler.getErrorMessage(err)
+    })
+    }
+}
   
   
 
 
 export default {
     create,defaultPhoto,
-    list,photo,shopByID
+    list,photo,shopByID,listByOwner
 }
