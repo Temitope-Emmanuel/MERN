@@ -9,7 +9,7 @@ import {makeStyles} from '@material-ui/core/styles'
 import {read, listRelated} from './api-product.js'
 import {Link} from 'react-router-dom'
 import Suggestions from './../product/Suggestions'
-import AddToCart from './../cart/AddToCart'
+// import AddToCart from './../cart/AddToCart'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,7 +85,7 @@ const Product = ({match}) => {
     return function cleanup(){
       abortController.abort()
     }
-  },[])
+  },[match.params.productId])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -97,6 +97,7 @@ const Product = ({match}) => {
       if(data.error){
         setAlert({...alert,error:data.error})
       }else{
+        console.log("This is the data")
         setAlert({...alert,suggestion:data})
       }
     })
@@ -105,9 +106,12 @@ const Product = ({match}) => {
       abortController.abort()
     }
   },[match.params.productId])
+
   const imageUrl = product._id
           ? `/api/product/image/${product._id}?${new Date().getTime()}`
           : '/api/product/defaultphoto'
+          
+  
       return(
         <div className={classes.root}>
           <Grid container spacing={10}>
@@ -116,11 +120,11 @@ const Product = ({match}) => {
                 <CardHeader
                 title={product.name}
                 subheader={product.quantity > 0 ? 'In Stock' : 'OUt of Stock'}
-                action={
-                  <span className={classes.action}>
-                    <AddToCart cartStyle={classes.addCart} item={product} />
-                  </span>
-                }
+                // action={
+                //   <span className={classes.action}>
+                //     <AddToCart cartStyle={classes.addCart} item={product} />
+                //   </span>
+                // }
                 />
                 <div className={classes.flex}>
                   <CardMedia
@@ -136,9 +140,9 @@ const Product = ({match}) => {
                       </span>
                       <Link to={`/shops/`+product.shop._id} className={classes.link}>
                         <span>
-                          <Icon className={classes.icon} >
+                          {/* <Icon className={classes.icon} >
                             shopping_basket
-                          </Icon>
+                          </Icon> */}
                           {product.shop.name}
                         </span>
                       </Link>
@@ -146,7 +150,17 @@ const Product = ({match}) => {
                 </div>
               </Card>
             </Grid>
+            {alert.suggestion?.length > 0 &&
+            (
+              <Grid item xs={5} sm={5}>
+                <Suggestions products={alert.suggestion}
+                 title="Related Products" />
+              </Grid>
+            )}
           </Grid>
         </div>
           )   
 }
+
+
+export default Product

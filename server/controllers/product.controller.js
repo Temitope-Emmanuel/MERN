@@ -74,7 +74,6 @@ const productByID = async (req, res, next, id) => {
 }
 
 const listLatest = async (req,res) => {
-  console.log("listening succesfful@ latest")
     try{
         let products = await Product.find().sort('-created')
                 .limit(5).populate('shop','_id name').exec()
@@ -87,7 +86,6 @@ const listLatest = async (req,res) => {
 }
 
 const listRelated = async (req,res) => {
-  console.log("at the list related")
     try{
         let products = await Product.find({
             "_id":{"$ne":req.product},
@@ -100,10 +98,22 @@ const listRelated = async (req,res) => {
         })
     }
 }
+
+const read = (req,res) => {
+  try{
+    const response = req.product
+    response.image = undefined
+    res.json(response)
+  }catch(err){
+    return res.json(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+}
   
   
 
 export default {
-    create,listByShop,defaultPhoto,
+    create,listByShop,defaultPhoto,read,
     productByID,photo,listLatest,listRelated
 }

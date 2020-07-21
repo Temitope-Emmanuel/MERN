@@ -1,5 +1,4 @@
 
-
 export const create = async (params,product) => {
     try{
         const response = await fetch(`/api/products/by/${params.shopId}`,{
@@ -9,6 +8,22 @@ export const create = async (params,product) => {
                 Accept:"application/json"
             },
             body:product
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
+export const read = async(params,signal) => {
+    console.log(params)
+    try{
+        const response = await fetch(`/api/products/${params.productId}`,{
+            method:'GET',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json'
+            },
+            signal
         })
         return response.json()
     }catch(err){
