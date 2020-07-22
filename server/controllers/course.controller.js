@@ -34,7 +34,7 @@ const create = (req, res) => {
 }
 
 const isInstructor = (req, res, next) => {
-    const isInstructor = req.course && req.auth && req.course.instructor._id == req.auth._id
+    const isInstructor = req.course.instructor?._id == req.auth?._id
     if(!isInstructor){
       return res.status('403').json({
         error: "User is not authorized"
@@ -85,11 +85,25 @@ const read = (req,res) => {
     req.course.image = undefined
     return res.json(req.course)
 }
-  
+
+const newLesson = async (req,res) => {
+  try{
+    let {lesson} = req.body
+    let result = await Course.findByIdAndUpdate(req.course._id,
+                       {$push:{lessons:lesson},
+                       updated:Date.now()},{new:true})
+                       .populate('instructor','_id name').exec()
+                res.json(result)
+  }catch(err){
+    return res.status(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+}
   
 
   
 export default {
-    create,listByInstructor,read,
-    photo,defaultPhoto,courseByID
+    create,listByInstructor,read,isInstructor,
+    photo,defaultPhoto,courseByID,newLesson
 }

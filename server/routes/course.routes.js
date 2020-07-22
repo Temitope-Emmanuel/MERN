@@ -12,7 +12,8 @@ router.route('/api/courses/photo/:courseId')
 router.route('/api/courses/defaultphoto')
   .get(courseCtrl.defaultPhoto)
 
-  // Create a new course
+  // Create a new course and getting course based on an 
+  // instructor
 router.route('/api/courses/by/:userId')
       .post(authCtrl.requireSignin,authCtrl.hasAuthorization,
         userCtrl.isEducator,courseCtrl.create)
@@ -23,6 +24,9 @@ router.route('/api/courses/by/:userId')
 //   For performing specific query on the system
 router.route('/api/courses/:courseId').get(courseCtrl.read)
 
+router.route('/api/courses/:courseId/lesson/new')
+      .put(authCtrl.requireSignin,courseCtrl.isInstructor,
+        courseCtrl.newLesson)
 
 router.param("userId",userCtrl.userByID)
 router.param("courseId",courseCtrl.courseByID)

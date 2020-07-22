@@ -22,7 +22,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 // import {enrollmentStats} from './../enrollment/api-enrollment'
-// import NewLesson from './NewLesson'
+import NewLesson from './NewLesson'
 // import DeleteCourse from './DeleteCourse'
 // import Enroll from './../enrollment/Enroll'
 import {isAuthenticated} from './../auth/auth-helper'
@@ -36,14 +36,16 @@ const useStyles = makeStyles(theme => ({
       }),
   flex:{
     display:'flex',
-    marginBottom: 20
-  },
+    marginBottom: 20,
+    flexDirection:"column"
+    },
   card: {
     padding:'24px 40px 40px'
   },
   subheading: {
     margin: '10px',
-    color: theme.palette.openTitle
+    color: theme.palette.openTitle,
+    fontSize:"1.2em"
   },
   details: {
     margin: '16px',
@@ -116,6 +118,10 @@ const Course = ({match}) => {
       }
     }, [match.params.courseId])
     
+    const addLesson = (cours) => {
+      setCourse(cours)
+    }
+
     const imageUrl = course._id
           ? `/api/courses/photo/${course._id}?${new Date().getTime()}`
           : '/api/courses/defaultphoto'
@@ -159,6 +165,42 @@ const Course = ({match}) => {
                 </>
             }
                 />
+                <div className={classes.flex} >
+                  <CardMedia
+                  className={classes.media}
+                  image={imageUrl}
+                  title={course.name} 
+                   />
+                   <div className={classes.details}>
+                     <Typography variant="body1"
+                      className={classes.subheading} >
+                        {course.description}
+                     </Typography>
+                   </div>
+                </div>
+                <Divider/>
+                <div>
+                  <CardHeader
+                  title={
+                    <Typography variant="h6"
+                     className={classes.subheading} >
+                       Lessons
+                    </Typography>
+                  }
+                  subheader={
+                    <Typography className={classes.subheading}
+                     variant="body1" >
+                       {course.lessons && course.lessons.length} Lessons
+                    </Typography>
+                  }
+                  action={
+                    jwt.user?._id == course.instructor._id &&
+                       (<span className={classes.action}>
+                         <NewLesson courseId={course._id}
+                          title={course.name} addLesson={addLesson}/>
+                       </span>)
+                   }/>
+                </div>
             </Card>
         </div>
     )
