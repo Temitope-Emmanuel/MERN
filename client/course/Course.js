@@ -23,7 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 // import {enrollmentStats} from './../enrollment/api-enrollment'
 import NewLesson from './NewLesson'
-// import DeleteCourse from './DeleteCourse'
+import DeleteCourse from './DeleteCourse'
 // import Enroll from './../enrollment/Enroll'
 import {isAuthenticated} from './../auth/auth-helper'
 
@@ -121,6 +121,10 @@ const Course = ({match}) => {
     const addLesson = (cours) => {
       setCourse(cours)
     }
+    const removeCourse = (course) => {
+      setValues({...values, redirect:true})
+    }
+    
 
     const imageUrl = course._id
           ? `/api/courses/photo/${course._id}?${new Date().getTime()}`
@@ -129,7 +133,6 @@ const Course = ({match}) => {
             return (<Redirect to={'/teach/courses'}/>)
           }
           
-    console.log(course)
     return(
         <div className={classes.root}>
             <Card className={classes.card}>
@@ -148,12 +151,13 @@ const Course = ({match}) => {
                       <Edit/>
                     </IconButton>
                   </Link>
-                {/* {!course.published ? (<>
-                  <Button color="secondary" variant="outlined" onClick={clickPublish}>{course.lessons.length == 0 ? "Add atleast 1 lesson to publish" : "Publish"}</Button>
+                {!course.published ? (<>
+                  {/* <Button color="secondary" variant="outlined" onClick={clickPublish}>{course.lessons.length == 0 ? "Add atleast 1 lesson to publish" : "Publish"}</Button> */}
                   <DeleteCourse course={course} onRemove={removeCourse}/>
                 </>) : (
-                  <Button color="primary" variant="outlined">Published</Button>
-                )} */}
+                  <Button color="primary"
+                   variant="outlined">Published</Button>
+                )}
                 </span>)
              }
                 {/* {course.published && (<div>

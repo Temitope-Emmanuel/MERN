@@ -131,10 +131,19 @@ const update = async (req, res) => {
   })
 }
 
-  
-
+const remove = async(req,res) => {
+  try{
+    let course = req.course
+    let DeletedCourse = await course.remove()
+    res.json(DeletedCourse)
+  }catch(err){
+    return res.status(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+}
   
 export default {
-    create,listByInstructor,read,isInstructor,
+    create,listByInstructor,read,isInstructor,remove,
     photo,defaultPhoto,courseByID,newLesson,update
 }

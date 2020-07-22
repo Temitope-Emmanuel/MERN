@@ -135,9 +135,31 @@ const EditCourse = ({match}) => {
               setAlert({...alert, redirect: true})
             }
           })
+    }
+    const moveUp = (idx) => (evt) => {
+        const {lessons} = course
+        const moveUp = lessons[idx]
+        lessons[idx] = lessons[idx-1]
+        lessons[idx - 1] = moveUp
+        setCourse({...course,lessons})
+    }
+    const moveDown = (idx) => (evt) => {
+        const {lessons} = course
+        const moveUp = lessons[idx]
+        lessons[idx] = lessons[idx+1]
+        lessons[idx + 1] = moveUp
+        setCourse({...course,lessons})
+    }
+    const handleLessonChange = (name, index) => event => {
+        const lessons = course.lessons
+        lessons[index][name] =  event.target.value
+        setCourse({ ...course, lessons: lessons })
       }
-      
-      
+      const deleteLesson = index => event => {
+        const lessons = course.lessons
+        lessons.splice(index, 1)
+        setCourse({...course, lessons:lessons})
+     }
 
     if (alert.redirect) {
         return (<Redirect to={'/teach/course/'+course._id}/>)
@@ -205,6 +227,74 @@ const EditCourse = ({match}) => {
                   </div>
           </div>
           <Divider/>
+          <div>
+                <CardHeader
+                  title={<Typography variant="h6" className={classes.subheading}>Lessons - Edit and Rearrange</Typography>
+                }
+                  subheader={<Typography variant="body1" className={classes.subheading}>{course.lessons && course.lessons.length} lessons</Typography>}
+                />
+                <List>
+                {course.lessons && course.lessons.map((lesson, index) => {
+                    return(<span key={index}>
+                    <ListItem className={classes.list}>
+                    <ListItemAvatar>
+                        <>
+                        <Avatar>
+                        {index+1}
+                        </Avatar>
+                     { index != 0 &&     
+                      <IconButton aria-label="up"
+                       color="primary" onClick={moveUp(index)}
+                        className={classes.upArrow}>
+                        <ArrowUp />
+                      </IconButton>
+                     }
+                     { index < (course.lessons.length-1) &&     
+                      <IconButton aria-label="down"
+                       color="primary" onClick={moveDown(index)}
+                        className={classes.upArrow}>
+                        <ArrowUp style={{transform :"rotate(180deg)"}} />
+                      </IconButton>
+                     }
+                    </>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={<><TextField
+                            margin="dense"
+                            label="Title"
+                            type="text"
+                            fullWidth
+                            value={lesson.title} onChange={handleLessonChange('title', index)}
+                          /><br/>
+                          <TextField
+                          margin="dense"
+                          multiline
+                          rows="5"
+                          label="Content"
+                          type="text"
+                          fullWidth
+                          value={lesson.content} onChange={handleLessonChange('content', index)}
+                        /><br/>
+                        <TextField
+            margin="dense"
+            label="Resource link"
+            type="text"
+            fullWidth
+            value={lesson.resource_url} onChange={handleLessonChange('resource_url', index)}
+          /><br/></>}
+                    />
+                    {!course.published && <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="up" color="primary" onClick={deleteLesson(index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>}
+                    </ListItem>
+                    <Divider style={{backgroundColor:'rgb(106, 106, 106)'}} component="li" />
+                    </span>)
+                }
+                )}
+                </List>
+                </div>
           </Card>
       </div>
   )    

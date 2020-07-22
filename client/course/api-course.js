@@ -76,6 +76,22 @@ export const update = async (params,course) => {
     console.log(err)
   }
 }
+export const remove = async (params) => {
+  try {
+    let response = await fetch('/api/courses/' + params.courseId, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + params.token
+      }
+    })
+    return await response.json()
+  } catch(err) {
+    console.log(err)
+  }
+}
+
 
 
   
