@@ -58,7 +58,7 @@ const Menu = ({history}) => (
             {
                 isAuthenticated() && (<span>
                     {isAuthenticated().user.educator && (
-                        <Link to="/seller/courses">
+                        <Link to="/teach/courses">
                                 <Button style={isPartActive(history, "/teach/")}>
                                 <Library/> Teach</Button></Link>)}
                             <Link to={"/user/" + isAuthenticated().user._id}>

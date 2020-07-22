@@ -14,22 +14,26 @@ import NewCourse from "./course/NewCourse"
 import MyCourses from "./course/MyCourses"
 import Course from "./course/Course"
 import EditCourse from "./course/EditCourse"
+import Enrollment from "./enrollment/Enrollment"
 
 const MainRouter = () => {
     return(
         <>
             <Menu/>
             <Switch>
+                <Route exact path="/" component={Home} />
                 <Route exact path="/users" component={Users} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/signin" component={SignIn} />
+                
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
                 <Route exact path="/user/:userId" component={Profile} />
-                <Route exact path="/teach/course/new" component={NewCourse} />
-                <Route exact path="/teach/course/edit/:courseId" component={EditCourse} />
-                <Route exact path="/seller/courses" component={MyCourses} />
-                <Route exact path="/course/:courseId" component={Course} />
-                <Route exact path="/" component={Home} />
+                <PrivateRoute exact path="/teach/courses" component={MyCourses} />
+                
+                <PrivateRoute exact path="/teach/course/new" component={NewCourse} />
+                <PrivateRoute exact path="/teach/course/edit/:courseId" component={EditCourse} />
+                <PrivateRoute exact path="/course/:courseId" component={Course} />
+                <PrivateRoute exact path="/learn/:enrollmentId" component={Enrollment} />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>
         </>
