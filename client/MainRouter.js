@@ -12,6 +12,7 @@ import EditProfile from "./user/EditProfile"
 
 import NewCourse from "./course/NewCourse"
 import MyCourses from "./course/MyCourses"
+import Course from "./course/Course"
 
 const MainRouter = () => {
     return(
@@ -25,6 +26,7 @@ const MainRouter = () => {
                 <Route exact path="/user/:userId" component={Profile} />
                 <Route exact path="/teach/course/new" component={NewCourse} />
                 <Route exact path="/seller/courses" component={MyCourses} />
+                <Route exact path="/course/:courseId" component={Course} />
                 <Route exact path="/" component={Home} />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>

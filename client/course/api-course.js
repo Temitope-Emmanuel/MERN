@@ -29,3 +29,19 @@ export const listByInstructor = async (params, signal) => {
       console.log(err)
     }
   }
+export const read = async (params, signal) => {
+    try {
+      let response = await fetch('/api/courses/' + params.courseId, {
+        method: 'GET',
+        signal: signal,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      return await response.json()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+  

@@ -70,7 +70,7 @@ const MyCourses = () => {
         return <Redirect to='/signin'/>
       }
 
-      
+
       return (
         <div>
           <Paper className={classes.root} elevation={4}>
@@ -86,7 +86,7 @@ const MyCourses = () => {
             </Typography>
             <List dense>
             {courses.map((course, i) => {
-                return   <Link to={"/teach/course/"+course._id} key={i}>
+                return   <Link to={"/course/"+course._id} key={i}>
                   <ListItem button>
                     <ListItemAvatar>
                       <Avatar src={'/api/courses/photo/'+course._id+"?" + new Date().getTime()} className={classes.avatar}/>

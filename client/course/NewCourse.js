@@ -51,7 +51,7 @@ const NewCourse = () => {
     const [values,setValues] = useState({
         name: '',
         description: '',
-        image: '',
+        image: null,
         category: ''
     })
     const [alert,setAlert] = useState({

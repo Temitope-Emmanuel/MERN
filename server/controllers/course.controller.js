@@ -67,26 +67,29 @@ const defaultPhoto = (req, res) => {
 }
 const courseByID = async (req,res,next,id) => {
     try{
-        const course = await Course.findById(id)
+      let course = await Course.findById(id).populate('instructor', '_id name')
         if(!course){
             return res.status(401).json({
                 error:"Course does not Exist"
             })
         }
         req.course = course
-        console.log(course)
         next()
     }catch(err){
         return res.status(400).json({
-            error:errorHandler.getErrorMessage(err)
+            error:"Could Not Retrieve Course"
         })
     }
+}
+const read = (req,res) => {
+    req.course.image = undefined
+    return res.json(req.course)
 }
   
   
 
   
 export default {
-    create,listByInstructor,
+    create,listByInstructor,read,
     photo,defaultPhoto,courseByID
 }
