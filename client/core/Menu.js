@@ -25,7 +25,7 @@ const isPartActive = (history, path) => {
   
 
 const Menu = ({history}) => (
-    <AppBar position="static" >
+    <AppBar position="fixed" >
         <Toolbar>
             <Typography variant="h6" color="inherit" >
                 MERN Skeleton
