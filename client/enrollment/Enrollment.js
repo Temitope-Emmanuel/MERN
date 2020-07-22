@@ -163,9 +163,9 @@ const Enrollment = ({match}) => {
   const imageUrl = enrollment.course._id
           ? `/api/courses/photo/${enrollment.course._id}?${new Date().getTime()}`
           : '/api/courses/defaultphoto'
-    return(
-              <div>loading...</div>
-          )
+    // return(
+    //           <div>loading...</div>
+    //       )
     return(
         <div className={classes.root}>
         <Drawer
@@ -228,14 +228,14 @@ const Enrollment = ({match}) => {
                         <span className={classes.category}>{enrollment.course.category}</span>
                       </div>
                     }
-                  action={
-                    totalComplete == enrollment.lessonStatus.length &&
-                (<span className={classes.action}>
-                  <Button variant="contained" color="secondary">
-                    <CheckCircle /> &nbsp; Completed
-                  </Button>
-                </span>)
-            }
+            //       action={
+            //         totalComplete == enrollment.lessonStatus.length &&
+            //     (<span className={classes.action}>
+            //       <Button variant="contained" color="secondary">
+            //         <CheckCircle /> &nbsp; Completed
+            //       </Button>
+            //     </span>)
+            // }
                 />
                 {/* <div className={classes.flex}>
                   <CardMedia

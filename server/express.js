@@ -39,10 +39,10 @@ app.use(helmet())
 app.use(cors())
 
 
+app.use("/",enrollmentRoutes)
 app.use("/",userRoutes)
 app.use("/",authRoutes)
 app.use("/",courseRoutes)
-app.use("/",enrollmentRoutes)
 app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
     'dist')))
 

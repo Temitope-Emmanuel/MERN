@@ -1,6 +1,7 @@
 
 
 export const create = async (params) => {
+    console.log(params)
     try {
         let response = await fetch('/api/enrollment/new/'+params.courseId, {
           method: 'POST',
