@@ -47,7 +47,6 @@ const userByID = async (req,res,next,id) => {
 const read = (req,res) => {
     req.profile.hashed_password = undefined
     req.profile.salt = undefined
-    console.log(req.profile)
     return res.json(req.profile)
 }
 
@@ -82,6 +81,23 @@ const remove = async (req,res) => {
         })
     }
 }
+const isEducator = async (req,res,next) => {
+    try{
+        const isEducator = req.profile?.educator
+        if(!isEducator){
+            return res.status(403).json({
+                error:"User is not an Educator"
+            })
+        }
+        next()
+    }catch(err){
+        return res.status(400).json({
+            error:"Something went wrong here"
+        })
+    }
+}
 
 
-export default {create,userByID,read,list,remove,update}
+export default {
+    create,userByID,read,
+    list,remove,update,isEducator}

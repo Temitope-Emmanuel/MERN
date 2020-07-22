@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider'
 import DeleteUser from './DeleteUser'
 import {read} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
+import NewCourse from "../course/NewCourse"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -60,6 +61,7 @@ const Profile = ({match}) => {
     }
 
     return (
+        <>
         <Paper className={classes.root} elevation={4}>
                 <Typography variant="h6" className={classes.title}>
                     Profile
@@ -72,7 +74,7 @@ const Profile = ({match}) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={user.name} secondary={user.email}/>
-                        {isAuthenticated().user && isAuthenticated().user._id ==
+                        {jwt.user && jwt.user._id ==
                             user._id && 
                             (<ListItemSecondaryAction>
                                     <Link to={"/user/edit/" + user._id} >
@@ -80,6 +82,7 @@ const Profile = ({match}) => {
                                             <Edit/>
                                         </IconButton>
                                     </Link>
+                                    <DeleteUser userId={jwt.user._id} />
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>
@@ -90,6 +93,8 @@ const Profile = ({match}) => {
                     </ListItem>
                 </List>
         </Paper>
+        <NewCourse/>
+        </>
         )
 }
 
