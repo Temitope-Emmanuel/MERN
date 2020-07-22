@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Icon from '@material-ui/core/Icon'
 import { makeStyles } from '@material-ui/core/styles'
-import {isAuthenticated} from './../auth/auth-helper'
+import {isAuthenticated,updateUser} from './../auth/auth-helper'
 import {read, update} from './api-user.js'
 import {Redirect} from 'react-router-dom'
 import Visibility from '@material-ui/icons/Visibility';
@@ -57,6 +57,7 @@ const EditProfile = ({ match }) => {
   const [alert,setAlert] = useState({
     open: false,
     error: '',
+    userId:"",
     redirectToProfile: false
   })
 
@@ -97,7 +98,10 @@ const EditProfile = ({ match }) => {
       if (data && data.error) {
         setAlert({...alert, error: data.error})
       } else {
-        setValues({...values, userId: data._id, redirectToProfile: true})
+        updateUser(data, () => {
+          setAlert({...alert, userId: data._id,
+             redirectToProfile: true})
+        })
       }
     })
   }
@@ -110,8 +114,8 @@ const EditProfile = ({ match }) => {
   }
 
   
-    if (values.redirectToProfile) {
-      return (<Redirect to={'/user/' + values.userId}/>)
+    if (alert.redirectToProfile) {
+      return (<Redirect to={'/user/' + alert.userId}/>)
     }
 
     return (
