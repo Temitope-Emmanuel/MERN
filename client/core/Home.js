@@ -7,9 +7,11 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import unicornbikeImg from './../assets/images/unicornbike.jpg'
 import {Link} from "react-router-dom"
-import {isAuth, isAuthenticated} from "../auth/auth-helper"
+import {isAuthenticated} from "../auth/auth-helper"
 import Courses from "../course/Courses"
 import {listPublished} from "../course/api-course"
+import {listEnrolled} from "../enrollment/api-enrollment"
+import Enrollments from "../enrollment/Enrollments"
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -71,6 +73,24 @@ const Home = () => {
     const classes = useStyles()
     const jwt = isAuthenticated()
     const [courses,setCourses] = useState([])
+    const [ enrolled,setEnrolled] = useState([])
+    useEffect(() => {
+      const abortController = new AbortController()
+      const signal = abortController.signal
+      listEnrolled(
+        {token: jwt.token},
+        signal).then((data) => {
+        if (data.error) {
+          console.log(data.error)
+        } else {
+          setEnrolled(data)
+        }
+      })
+      return function cleanup(){
+        abortController.abort()
+      }
+    }, [])
+    
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -79,7 +99,6 @@ const Home = () => {
             if(data.error){
                 console.log(data.error)
             }else{
-                console.log("this is the data",data)
                 setCourses(data)
             }
         })
@@ -90,21 +109,33 @@ const Home = () => {
 
     return(
         <div className={classes.extraTop}>
-            {jwt.user && (
-                <Card  className={classes.card}>
-                    <Typography variant="h5" component="h2" >
-                        Published Courses
-                    </Typography>
-                    {(courses.length != 0) ? (
-                        <Courses courses={courses} />
-                    ) : (
-                        <Typography variant="body1"
-                         className={classes.noTitle} >
-                             No New Courses
-                        </Typography>
-                    )}
-                </Card>
-            )}
+           {jwt.user && (
+      <Card className={`${classes.card} ${classes.enrolledCard}`}>
+        <Typography variant="h6" component="h2" className={classes.enrolledTitle}>
+            Courses you are enrolled in
+        </Typography>
+        {enrolled.length != 0 ? 
+        (<Enrollments enrollments={enrolled}/>)
+                             :
+         (<Typography variant="body1" className={classes.noTitle}>
+           No courses.
+         </Typography>)
+        }
+      </Card>
+      )}
+      <Card  className={classes.card}>
+          <Typography variant="h5" component="h2" >
+              Published Courses
+          </Typography>
+          {(courses.length != 0) ? (
+              <Courses courses={courses} />
+          ) : (
+              <Typography variant="body1"
+                className={classes.noTitle} >
+                    No New Courses
+              </Typography>
+          )}
+      </Card>
         </div>
     )
 }
