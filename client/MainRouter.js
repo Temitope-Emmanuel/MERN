@@ -11,6 +11,7 @@ import Profile from "./user/Profile"
 import EditProfile from "./user/EditProfile"
 
 import NewCourse from "./course/NewCourse"
+import MyCourses from "./course/MyCourses"
 
 const MainRouter = () => {
     return(
@@ -23,6 +24,7 @@ const MainRouter = () => {
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
                 <Route exact path="/user/:userId" component={Profile} />
                 <Route exact path="/teach/course/new" component={NewCourse} />
+                <Route exact path="/seller/courses" component={MyCourses} />
                 <Route exact path="/" component={Home} />
                 <Route render={() => <Redirect to="/" />} />
             </Switch>

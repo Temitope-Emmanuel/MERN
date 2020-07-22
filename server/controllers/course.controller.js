@@ -32,5 +32,61 @@ const create = (req, res) => {
       }
     })
 }
+
+const isInstructor = (req, res, next) => {
+    const isInstructor = req.course && req.auth && req.course.instructor._id == req.auth._id
+    if(!isInstructor){
+      return res.status('403').json({
+        error: "User is not authorized"
+      })
+    }
+    next()
+}
+
+const listByInstructor = (req, res) => {
+    Course.find({instructor: req.profile._id}, (err, courses) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+      }
+      res.json(courses)
+    }).populate('instructor', '_id name')
+}
+
+const photo = (req, res, next) => {
+    if(req.course.image.data){
+      res.set("Content-Type", req.course.image.contentType)
+      return res.send(req.course.image.data)
+    }
+    next()
+}
+
+const defaultPhoto = (req, res) => {
+    return res.sendFile(process.cwd()+defaultImage)
+}
+const courseByID = async (req,res,next,id) => {
+    try{
+        const course = await Course.findById(id)
+        if(!course){
+            return res.status(401).json({
+                error:"Course does not Exist"
+            })
+        }
+        req.course = course
+        console.log(course)
+        next()
+    }catch(err){
+        return res.status(400).json({
+            error:errorHandler.getErrorMessage(err)
+        })
+    }
+}
   
-export default {create}
+  
+
+  
+export default {
+    create,listByInstructor,
+    photo,defaultPhoto,courseByID
+}
