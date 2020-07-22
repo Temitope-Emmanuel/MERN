@@ -22,7 +22,10 @@ router.route('/api/courses/by/:userId')
 
 
 //   For performing specific query on the system
-router.route('/api/courses/:courseId').get(courseCtrl.read)
+router.route('/api/courses/:courseId')
+      .get(courseCtrl.read)
+      .put(authCtrl.requireSignin,courseCtrl.isInstructor,
+        courseCtrl.update)
 
 router.route('/api/courses/:courseId/lesson/new')
       .put(authCtrl.requireSignin,courseCtrl.isInstructor,

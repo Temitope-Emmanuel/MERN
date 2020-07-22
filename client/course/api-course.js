@@ -61,4 +61,21 @@ export const newLesson = async (params, lesson) => {
   }
 }
 
+export const update = async (params,course) => {
+  try {
+    let response = await fetch('/api/courses/' + params.courseId, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + params.token
+      },
+      body: course
+    })
+    return await response.json()
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+
   
