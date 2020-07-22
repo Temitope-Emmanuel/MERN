@@ -200,6 +200,23 @@ const Course = ({match}) => {
                           title={course.name} addLesson={addLesson}/>
                        </span>)
                    }/>
+                   <List>
+                     {course.lessons?.map((lesson,idx) => (
+                       <span key={idx} >
+                         <ListItem>
+                           <ListItemAvatar>
+                             <Avatar>
+                               {idx+1}
+                             </Avatar>
+                           </ListItemAvatar>
+                           <ListItemText
+                           primary={lesson.title}
+                           />
+                         </ListItem>
+                           <Divider variant="inset" component="li" />
+                       </span>
+                     ))}
+                   </List>
                 </div>
             </Card>
         </div>
