@@ -14,6 +14,9 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -47,7 +50,8 @@ const EditProfile = ({ match }) => {
   const [values, setValues] = useState({
     name: '',
     password: '',
-    email: ''
+    email: '',
+    educator:false
   })
 
   const [alert,setAlert] = useState({
@@ -68,12 +72,14 @@ const EditProfile = ({ match }) => {
     const signal = abortController.signal
 
     read({
-      userId: match.params.userId
-    }, {token: jwt.token}, signal).then((data) => {
+      userId: match.params.userId,
+      token: jwt.token
+    }, signal).then((data) => {
       if (data && data.error) {
         setAlert({...alert, error: data.error})
       } else {
-        setValues({...values, name: data.name, email: data.email})
+        setValues({...values, name: data.name,
+           email: data.email,educator:data.educator})
       }
     })
     return function cleanup(){
@@ -84,10 +90,9 @@ const EditProfile = ({ match }) => {
 
   const clickSubmit = () => {
     update({
-      userId: match.params.userId
-    }, {
+      userId: match.params.userId,
       token: jwt.token
-    }, {...values}).then((data) => {
+    }, values).then((data) => {
         console.log(data)
       if (data && data.error) {
         setAlert({...alert, error: data.error})
@@ -100,6 +105,10 @@ const EditProfile = ({ match }) => {
   const handleChange = name => event => {
     setValues({...values, [name]: event.target.value})
   }
+  const handleCheck = (event, checked) => {
+    setValues({...values, educator: checked})
+  }
+
   
     if (values.redirectToProfile) {
       return (<Redirect to={'/user/' + values.userId}/>)
@@ -124,6 +133,21 @@ const EditProfile = ({ match }) => {
                 </InputAdornment>
             }} 
             />
+            <Typography variant="subtitle1" className={classes.subheading}>
+            I am an Educator
+          </Typography>
+          <FormControlLabel
+            control={
+              <Switch classes={{
+                                checked: classes.checked,
+                                bar: classes.bar,
+                              }}
+                      checked={values.educator}
+                      onChange={handleCheck}
+              />}
+            label={values.educator ? 'Yes' : 'No'}
+          />
+          
           <br/> {
             alert.error && (<Typography component="p" color="error">
               {/* <Icon color="error" className={classes.error}>error</Icon> */}

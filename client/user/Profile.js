@@ -35,15 +35,15 @@ const Profile = ({match}) => {
     const classes = useStyles()
     const [user,setUser] = React.useState({})
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
+    const jwt = isAuthenticated()
 
     React.useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
-        const jwt = isAuthenticated()
         read({
-            userId:match.params.userId
-        },
-        {token:jwt.token},signal).then((data) => {
+            userId:match.params.userId,
+            token:jwt.token
+        },signal).then((data) => {
             if(data && data.error){
                 setRedirectToSignIn(true)
             }else{

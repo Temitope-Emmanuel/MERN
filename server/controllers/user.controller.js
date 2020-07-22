@@ -47,11 +47,11 @@ const userByID = async (req,res,next,id) => {
 const read = (req,res) => {
     req.profile.hashed_password = undefined
     req.profile.salt = undefined
+    console.log(req.profile)
     return res.json(req.profile)
 }
 
 const update = async (req,res) => {
-    console.log("Reaching the update router ")
     try{
         let user = req.profile
         user = extend(user,req.body)
@@ -60,9 +60,9 @@ const update = async (req,res) => {
         
         user.hashed_password = undefined
         user.salt = undefined
+        user.image = undefined
         res.json(user)
     }catch(err){
-        console.log("this is the error",err)
         return res.status(400).json({
             error:errorHandler.getErrorMessage(err)
         })
