@@ -121,9 +121,33 @@ const Course = ({match}) => {
     const addLesson = (cours) => {
       setCourse(cours)
     }
+    const handleToggle = () => {
+      setOpen(!open)
+    }
     const removeCourse = (course) => {
       setValues({...values, redirect:true})
     }
+    const clickPublish = () => {
+      if(course.lessons.length > 0){
+        setOpen(true)
+      }
+    }
+    const publish = () => {
+      let courseData = new FormData()
+        courseData.append('published', true)
+        update({
+            courseId: match.params.courseId,
+            token: jwt.token
+          }, courseData).then((data) => {
+            if (data && data.error) {
+              setValues({...values, error: data.error})
+            } else {
+              setCourse({...course, published: true})
+              setOpen(false)
+            }
+        })
+    }
+    
     
 
     const imageUrl = course._id
@@ -146,16 +170,21 @@ const Course = ({match}) => {
                   action={<>
              {jwt.user && jwt.user._id == course.instructor._id &&
                 (<span className={classes.action}>
+                 {!course.published ? (<>
+                  <Button color="secondary" variant="outlined"
+                   onClick={clickPublish}>
+                     {course.lessons.length == 0 ?
+                      "Add at least 1 lesson to publish" : "Publish"}
+                  </Button>
+                  <DeleteCourse course={course} onRemove={removeCourse}/>
                   <Link to={"/teach/course/edit/" + course._id}>
                     <IconButton aria-label="Edit" color="secondary">
                       <Edit/>
                     </IconButton>
                   </Link>
-                {!course.published ? (<>
-                  {/* <Button color="secondary" variant="outlined" onClick={clickPublish}>{course.lessons.length == 0 ? "Add atleast 1 lesson to publish" : "Publish"}</Button> */}
-                  <DeleteCourse course={course} onRemove={removeCourse}/>
                 </>) : (
-                  <Button color="primary"
+                  <Button color="secondary"
+                  disabled={true}
                    variant="outlined">Published</Button>
                 )}
                 </span>)
@@ -198,7 +227,7 @@ const Course = ({match}) => {
                     </Typography>
                   }
                   action={
-                    jwt.user?._id == course.instructor._id &&
+                    jwt.user?._id == course.instructor._id && !course.published &&
                        (<span className={classes.action}>
                          <NewLesson courseId={course._id}
                           title={course.name} addLesson={addLesson}/>
@@ -223,6 +252,20 @@ const Course = ({match}) => {
                    </List>
                 </div>
             </Card>
+            <Dialog open={open} onClose={handleToggle}
+             aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Publish Course</DialogTitle>
+                <DialogContent>
+                  <Typography variant="body1">Publishing your course will make it live to students for enrollment. </Typography><Typography variant="body1">Make sure all lessons are added and ready for publishing.</Typography></DialogContent>
+                <DialogActions>
+                <Button onClick={handleToggle} color="primary" variant="contained">
+                  Cancel
+                </Button>
+                <Button onClick={publish} color="secondary" variant="contained">
+                  Publish
+                </Button>
+              </DialogActions>
+             </Dialog>   
         </div>
     )
 }

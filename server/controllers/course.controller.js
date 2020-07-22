@@ -142,8 +142,19 @@ const remove = async(req,res) => {
     })
   }
 }
+
+const listPublished = (req,res) => {
+  Course.find({published:true},(err,response) => {
+    if(err){
+      return res.status(400).json({
+        error:errorHandler.getErrorMessage(err)
+      })
+    }
+    res.json(response)
+  }).populate('instructor','_id name')
+}
   
 export default {
     create,listByInstructor,read,isInstructor,remove,
-    photo,defaultPhoto,courseByID,newLesson,update
+    photo,defaultPhoto,courseByID,newLesson,update,listPublished
 }

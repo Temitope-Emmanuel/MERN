@@ -92,6 +92,22 @@ export const remove = async (params) => {
   }
 }
 
+export const listPublished = async (signal) => {
+  try{
+    const response = await fetch('/api/courses/published',{
+      method:'GET',
+      headers:{
+       'Accept':'application/json',
+       'Content-Type':'application/json' 
+      },
+      signal
+    })
+    return response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
+
 
 
   

@@ -21,6 +21,8 @@ router.route('/api/courses/by/:userId')
         courseCtrl.listByInstructor)
 
 
+// Get a list of published courses
+router.route('/api/courses/published').get(courseCtrl.listPublished)
 //   For performing specific query on the system
 router.route('/api/courses/:courseId')
       .get(courseCtrl.read)
@@ -28,9 +30,12 @@ router.route('/api/courses/:courseId')
         courseCtrl.update)
         .delete(authCtrl.requireSignin,courseCtrl.isInstructor,courseCtrl.remove)
 
+        
+//    Add a new lesson To a Course
 router.route('/api/courses/:courseId/lesson/new')
       .put(authCtrl.requireSignin,courseCtrl.isInstructor,
         courseCtrl.newLesson)
+
 
 router.param("userId",userCtrl.userByID)
 router.param("courseId",courseCtrl.courseByID)
