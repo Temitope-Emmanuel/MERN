@@ -16,6 +16,13 @@ router.route('/api/enrollment/:enrollmentId')
       .get(authCtrl.requireSignin,enrollmentCtrl.isStudent,
         enrollmentCtrl.read)
 
+// Mark a lesson has completed
+router.route('/api/enrollment/complete/:enrollmentId')
+      .put(authCtrl.requireSignin,enrollmentCtrl.isStudent,enrollmentCtrl.complete)
+
+router.route("/api/enrollment/enrolled")
+      .get(authCtrl.requireSignin,enrollmentCtrl.listEnrolled)
+
 router.param('courseId',courseCtrl.courseByID)
 router.param('enrollmentId',enrollmentCtrl.enrollmentByID)
 

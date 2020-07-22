@@ -33,3 +33,21 @@ export const read = async(params,signal) =>{
         console.log(err)
     }
 } 
+export const complete = async (params,enrollment) => {
+  console.log("Raehinc")
+  try{
+    let response = await fetch(`/api/enrollment/complete/${params.enrollmentId}`,{
+      method:'PUT',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        Authorization:`Bearer ${params.token}`
+      },
+      body:JSON.stringify(enrollment)
+    })
+    return await response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
+

@@ -1,5 +1,5 @@
 import Enrollment from "../models/enrollment.model"
-import dbErrorHandler from "../helpers/dbErrorHandler"
+import errorHandler from "../helpers/dbErrorHandler"
 
 const findEnrollment = async (req, res, next) => {
     try {
@@ -17,7 +17,6 @@ const findEnrollment = async (req, res, next) => {
   }
 
   const enrollmentByID = async (req, res, next, id) => {
-    console.log("reahinf the enrolloment  by id")
     try {
       let enrollment = await Enrollment.findById(id)
                                       .populate({path: 'course', populate:{ path: 'instructor'}})
@@ -55,24 +54,55 @@ const create = async (req, res) => {
     }
   }
   
-
 const read = (req,res) => {
     return res.json(req.enrollment)
 }
 const isStudent = (req,res,next) => {
-    console.log("is student")
     const isStudent = req.auth?._id == req.enrollment.student._id
     if(!isStudent){
         return res.status(403).json({
             error:"User is not enrolled"
         })
     }
-    console.log('success at student')
     next()
+}
+
+const complete = async (req, res) => {
+  let updatedData = {}
+  updatedData['lessonStatus.$.complete']= req.body.complete 
+  updatedData.updated = Date.now()
+  if(req.body.courseCompleted)
+    updatedData.completed = req.body.courseCompleted
+
+    try {
+      let enrollment = await Enrollment.updateOne(
+        {'lessonStatus._id':req.body.lessonStatusId},
+         {'$set': updatedData})
+      res.json(enrollment)
+    } catch (err) {
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err)
+      })
+    }
+}
+
+const listEnrolled = async (req,res) => {
+  try{
+    const enrollment = await Enrollment.find({
+      student:req.auth._id
+    }).sort({'completed':1}).populate('course','_id name category')
+
+    res.json(enrollment)
+  }catch(err){
+    console.log(err)
+    return res.status(400).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
 }
 
 
 export default {
-    findEnrollment,create,read,
-    enrollmentByID,isStudent
+    findEnrollment,create,read,listEnrolled,
+    enrollmentByID,isStudent,complete
 }

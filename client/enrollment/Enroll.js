@@ -26,10 +26,8 @@ const Enroll = (props) => {
             token:jwt.token
         }).then((data) => {
             if(data.error){
-                console.log("error",data.error)
                 setValues({...values,error:data.error})
             }else{
-                console.log(data)
                 setValues({...values,enrollmentId:data._id,redirect:true})
             }
         })
