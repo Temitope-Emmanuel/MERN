@@ -9,7 +9,7 @@ import {makeStyles} from '@material-ui/core/styles'
 import {read, listRelated} from './api-product.js'
 import {Link} from 'react-router-dom'
 import Suggestions from './../product/Suggestions'
-// import AddToCart from './../cart/AddToCart'
+import AddToCart from './../cart/AddToCart'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -120,11 +120,11 @@ const Product = ({match}) => {
                 <CardHeader
                 title={product.name}
                 subheader={product.quantity > 0 ? 'In Stock' : 'OUt of Stock'}
-                // action={
-                //   <span className={classes.action}>
-                //     <AddToCart cartStyle={classes.addCart} item={product} />
-                //   </span>
-                // }
+                action={
+                  <span className={classes.action}>
+                    <AddToCart cartStyle={classes.addCart} item={product} />
+                  </span>
+                }
                 />
                 <div className={classes.flex}>
                   <CardMedia

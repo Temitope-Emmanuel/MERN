@@ -30,7 +30,6 @@ const create = (req, res, next) => {
     }
   })
 }
-
 const listByShop = async (req, res) => {
     try {
         // Query the database for product of a specific shop 
@@ -44,7 +43,6 @@ const listByShop = async (req, res) => {
       })
     }
 }
-
 const photo = (req, res, next) => {
     if(req.product.image.data){
       res.set("Content-Type", req.product.image.contentType)
@@ -52,11 +50,9 @@ const photo = (req, res, next) => {
     }
     next()
 }
-
 const defaultPhoto = (req, res) => {
     return res.sendFile(process.cwd()+defaultImage)
 }
-
 const productByID = async (req, res, next, id) => {
     try {
       let product = await Product.findById(id).populate('shop', '_id name').exec()
@@ -72,7 +68,6 @@ const productByID = async (req, res, next, id) => {
       })
     }
 }
-
 const listLatest = async (req,res) => {
     try{
         let products = await Product.find().sort('-created')
@@ -84,7 +79,6 @@ const listLatest = async (req,res) => {
         })
     }
 }
-
 const listRelated = async (req,res) => {
     try{
         let products = await Product.find({
@@ -98,7 +92,6 @@ const listRelated = async (req,res) => {
         })
     }
 }
-
 const read = (req,res) => {
   try{
     const response = req.product
@@ -178,11 +171,30 @@ const list = async (req,res) => {
   }
 } 
 
+const decreaseQuantity = async (req,res,next) => {
 
+  let bulkOps = req.body.order.products.map((item) => {
+    return {
+      "updateOne":{
+        "filter":{"_id":item.product._id},
+        "update":{"$inc":{"quantity":-item.quantity}}
+      }
+    }
+  })
+  try{
+    await Product.bulkWrite(bulkOps,{})
+    console.log("success")
+    next()
+  }catch(err){
+    return res.status(400).json({
+      error:"Could not update Product"
+    })
+  }
+}
   
   
 
 export default {
     create,listByShop,defaultPhoto,read,update,listCategories,
-    productByID,photo,listLatest,listRelated,remove,list
+    productByID,photo,listLatest,listRelated,remove,list,decreaseQuantity
 }

@@ -7,6 +7,10 @@ const UserSchema = new mongoose.Schema({
         trim:true,
         required:"Name is required"
     },
+    stripe_seller:{
+        type:Boolean,
+        default: false
+    },
     seller:{
         type:Boolean,
         default:false

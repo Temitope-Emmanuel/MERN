@@ -20,6 +20,8 @@ import NewProduct from "./product/NewProduct"
 import Product from "./product/Product"
 import EditProduct from "./product/EditProduct"
 
+import Cart from "./cart/Cart"
+// import StripeConnect from ""
 
 const MainRouter = () => {
     return(
@@ -27,6 +29,7 @@ const MainRouter = () => {
             <Menu/>
             <Switch>
                 <Route exact path="/users" component={Users} />
+                <Route exact path="/cart" component={Cart} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/signin" component={SignIn} />
                 <Route exact path="/product/:productId" component={Product} />

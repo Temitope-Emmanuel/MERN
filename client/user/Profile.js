@@ -13,10 +13,12 @@ import Typography from '@material-ui/core/Typography'
 import Edit from '@material-ui/icons/Edit'
 import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
-import DeleteUser from './DeleteUser'
-import {read} from './api-user.js'
+// import DeleteUser from './DeleteUser'
+import {read,update} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
 import NewShop from "../shop/NewShop"
+import config from '../../config/config'
+import stripeButton from "../assets/images/stripeButton.png"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -28,11 +30,18 @@ const useStyles = makeStyles(theme => ({
   title: {
     marginTop: theme.spacing(3),
     color: theme.palette.protectedTitle
+  },
+  stripe_connect: {
+    marginRight: '10px',
+  },
+  stripe_connected: {
+    verticalAlign: 'super',
+    marginRight: '10px'
   }
 }))
 
 
-const Profile = ({match}) => {
+const Profile = ({match,history}) => {
     const classes = useStyles()
     const [user,setUser] = React.useState({})
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
@@ -56,6 +65,20 @@ const Profile = ({match}) => {
             abortController.abort()
         }
     },[match.params.userId])
+    const setStripe = () => {
+        update({
+            userId: match.params.userId,
+            token: jwt.token
+          }
+          ,{stripe_seller:true}).then((data) => {
+              console.log(data)
+            if (data && data.error) {
+              setAlert({...alert, error: data.error})
+            } else {
+                history.push("/seller/stripe/connect")
+            }
+          })
+    }
 
     if(redirectToSignIn){
         return <Redirect to="/signin" />
@@ -83,6 +106,21 @@ const Profile = ({match}) => {
                                             <Edit/>
                                         </IconButton>
                                     </Link>
+                                    {user.seller && user.stripe_seller ? (
+                                        <Button disabled className={classes.stripe_connected}>
+                                            Stripe connected
+                                        </Button>
+                                    ) : (
+                                        (
+                                        // <a href={"https://connect.stripe.com/oauth/authorize?response_type=code&client_id="+config.stripe_connect_test_client_id+"&scope=read_write"}
+                                        //  className={classes.stripe_connect}>
+                                        //      <img src={stripeButton}/>
+                                        // </a>
+                                        <Button className={classes.stripe_connect} >
+                                            <img src={stripeButton} />
+                                        </Button>
+                                        )
+                                )}
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>

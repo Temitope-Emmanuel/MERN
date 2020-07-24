@@ -7,6 +7,9 @@ import HomeIcon from '@material-ui/icons/Home'
 import Button from '@material-ui/core/Button'
 import {isAuthenticated,clearJWT} from './../auth/auth-helper'
 import {Link, withRouter} from 'react-router-dom'
+import CartIcon from '@material-ui/icons/ShoppingCart'
+import Badge from '@material-ui/core/Badge'
+import {itemTotal} from '../cart/cart-helper'
 
 
 const isActive = (history,path) => {
@@ -27,7 +30,7 @@ const Menu = ({history}) => (
     <AppBar position="static" >
         <Toolbar>
             <Typography variant="h6" color="inherit" >
-                MERN Skeleton
+                MERN MarketPlace
             </Typography>
             <Link to="/" >
                 <IconButton aria-label="Home" 
@@ -45,21 +48,30 @@ const Menu = ({history}) => (
                     View Shops
                 </Button>
             </Link>
-            {(!isAuthenticated()) && (
-                <>
-                    <Link to="/signup" >
-                        <Button style={isActive(history,"/signup")} >
-                            Sign Up
-                        </Button>
-                    </Link>
-                    <Link to="/signin" >
-                        <Button style={isActive(history,"/signin")} >
-                            Sign in
-                        </Button>
-                    </Link>
-                </>
-            )}
-            {
+            <Link to='/cart'>
+                <Button style={isActive(history,'/cart')} >
+                    Cart
+                    <Badge color="secondary" badgeContent={itemTotal()}
+                     style={{'marginLeft': '7px'}} invisible={false}>
+                         <CartIcon/>
+                    </Badge>
+                </Button>
+            </Link>
+            <div style={{'position':'absolute', 'right': '10px'}}>
+                <span style={{'float': 'right'}}>
+      {
+        !isAuthenticated() && (<span>
+          <Link to="/signup">
+            <Button style={isActive(history, "/signup")}>Sign up
+            </Button>
+          </Link>
+          <Link to="/signin">
+            <Button style={isActive(history, "/signin")}>Sign In
+            </Button>
+          </Link>
+        </span>)
+      }
+      {
         isAuthenticated() && (<span>
           {isAuthenticated().user.seller && (
           <Link to="/seller/shops">
@@ -75,6 +87,8 @@ const Menu = ({history}) => (
             }}>Sign out</Button>
         </span>)
       }
+      </span>
+      </div>
       </Toolbar>
     </AppBar>
 )
