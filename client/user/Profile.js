@@ -13,12 +13,14 @@ import Typography from '@material-ui/core/Typography'
 import Edit from '@material-ui/icons/Edit'
 import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
 // import DeleteUser from './DeleteUser'
 import {read,update} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
 import NewShop from "../shop/NewShop"
 import config from '../../config/config'
 import stripeButton from "../assets/images/stripeButton.png"
+import MyOrder from "../order/MyOrder"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -83,7 +85,6 @@ const Profile = ({match,history}) => {
     if(redirectToSignIn){
         return <Redirect to="/signin" />
     }
-    console.log(jwt.user.seller)
     return (
         <>
         <Paper className={classes.root} elevation={4}>
@@ -97,16 +98,18 @@ const Profile = ({match,history}) => {
                                 <Person/>
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={user.name} secondary={user.email}/>
+                        <ListItemText primary={user.name}
+                         secondary={user.email}/>
                         {jwt.user?._id ==
                             user._id && 
                             (<ListItemSecondaryAction>
                                     <Link to={"/user/edit/" + user._id} >
-                                        <IconButton aria-label="Edit" color="primary" >
+                                        <IconButton aria-label="Edit"
+                                         color="primary" >
                                             <Edit/>
                                         </IconButton>
                                     </Link>
-                                    {user.seller && user.stripe_seller ? (
+                                    {/* {user?.seller && user.stripe_seller ? (
                                         <Button disabled className={classes.stripe_connected}>
                                             Stripe connected
                                         </Button>
@@ -120,7 +123,7 @@ const Profile = ({match,history}) => {
                                             <img src={stripeButton} />
                                         </Button>
                                         )
-                                )}
+                                )} */}
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>
@@ -131,7 +134,8 @@ const Profile = ({match,history}) => {
                     </ListItem>
                 </List>
         </Paper>
-        {jwt.user.seller && <NewShop/> }
+        <MyOrder/>
+        {jwt.user?.seller && <NewShop/> }
         </>
         )
 }

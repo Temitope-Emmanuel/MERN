@@ -7,11 +7,19 @@ import shopCtrl from "../controllers/shop.controller"
 
 const router = express.Router()
 
+// Get a list of order by a user
+router.route('/api/orders/user/:userId')
+      .get(authCtrl.requireSignin,orderCtrl.listByUser)
+
 // Get the list of available statuses
 router.route('/api/order/status_values')
-      .get(orderCtrl.getStatusValues)
-// Creates a new order
-router.route("/api/order/:userId")
+.get(orderCtrl.getStatusValues)
+
+// Get more detail about an order 
+router.route('/api/order/:orderId').get(authCtrl.requireSignin,orderCtrl.read)
+
+      // Creates a new order
+router.route("/api/orders/:userId")
       .post(authCtrl.requireSignin,
         productCtrl.decreaseQuantity,orderCtrl.create)
 
@@ -34,6 +42,7 @@ router.route('/api/order/:shopId/cancel/:productId')
 router.route('/api/order/:orderId/charge/:userId/:shopId')
       .put(authCtrl.requireSignin,shopCtrl.isOwner,
         userCtrl.createCharge,orderCtrl.update)
+
 
 router.param('userId',userCtrl.userByID)
 router.param('shopId',shopCtrl.shopByID)

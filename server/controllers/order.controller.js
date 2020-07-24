@@ -47,7 +47,6 @@ const update = async (req,res) => {
     }
 }
 const orderByID = async (req,res,next,id) => {
-    console.log("reaching the order route")
     try{
         let order = await Order.findById(id)
                 .populate('products.product','name price')
@@ -66,8 +65,23 @@ const orderByID = async (req,res,next,id) => {
         })
     }
 }
+const listByUser = async (req,res) => {
+    console.log("reaching sucess",req.profile)
+    try{
+        const result = await Order.find({'user':req.profile._id}).
+                                  sort('-created').exec()
+        res.json(result)
+    }catch(err){
+        return res.status(400).json({
+            error:errorHandler.getErrorMessage(err)
+        })
+    }
+}
+const read = (req,res) => {
+    return res.json(req.order)
+}
 
 
 export default {
     create,listByShop,getStatusValues,
-    update,orderByID}
+    update,orderByID,listByUser,read}
