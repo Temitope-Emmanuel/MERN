@@ -22,7 +22,7 @@ import EditProduct from "./product/EditProduct"
 
 import Cart from "./cart/Cart"
 import ShopOrders from "./order/shopOrders.js"
-// import Order from "./order/"
+import Order from "./order/Order"
 
 const MainRouter = () => {
     return(
@@ -33,6 +33,7 @@ const MainRouter = () => {
                 <Route exact path="/cart" component={Cart} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/signin" component={SignIn} />
+                <Route exact path="/order/:orderId" component={Order} />
                 <Route exact path="/product/:productId" component={Product} />
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
                 <PrivateRoute path="/seller/shop/new" component={NewShop} />

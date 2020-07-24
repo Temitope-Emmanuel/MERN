@@ -66,7 +66,6 @@ const orderByID = async (req,res,next,id) => {
     }
 }
 const listByUser = async (req,res) => {
-    console.log("reaching sucess",req.profile)
     try{
         const result = await Order.find({'user':req.profile._id}).
                                   sort('-created').exec()

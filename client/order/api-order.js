@@ -111,3 +111,17 @@ export const listByUser = async (params,signal) => {
         console.log(err)
     }
 }
+export const read = async (params,signal) => {
+    try{
+        const response = await fetch(`/api/order/${params.orderId}`,{
+            method:'GET',
+            headers:{
+                Authorization:`Bearer ${params.token}`
+            },
+            signal
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
