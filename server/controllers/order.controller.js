@@ -31,7 +31,6 @@ const getStatusValues = async (req,res) => {
     res.json(CartItem.schema.path('status').enumValues)
 }
 const update = async (req,res) => {
-    console.log("Reaching the order route")
     try{
         let order = await Order.updateOne(
             {'products._id':req.body.cartItemId},{
@@ -39,7 +38,6 @@ const update = async (req,res) => {
                     'products.$.status':req.body.status
                 }
             })
-            console.log("sucess",order)
         res.json(order)
     }catch(err){
         console.log("there's been an error",err)

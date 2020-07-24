@@ -78,4 +78,20 @@ export const cancelProduct = async (params,product) => {
         console.log(err)
     }
 };
-export const processCharge = async () => {};
+export const processCharge = async (params,product) => {
+    try{
+        // /api/order/:orderId/charge/:userId/:shopId
+        const response = await fetch(`/api/order/${params.orderId}/charge/${params.userId}/${params.shopId}`,{
+            method:'PUT',
+            headers:{
+                Authorization:`Bearer ${params.token}`,
+                'Content-Type':'application/json',
+                'Accept':'application/json'
+            },
+            body:JSON.stringify(product)
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+};
