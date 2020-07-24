@@ -21,7 +21,7 @@ import Product from "./product/Product"
 import EditProduct from "./product/EditProduct"
 
 import Cart from "./cart/Cart"
-// import StripeConnect from ""
+import ShopOrders from "./order/shopOrders.js"
 
 const MainRouter = () => {
     return(
@@ -36,6 +36,7 @@ const MainRouter = () => {
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
                 <PrivateRoute path="/seller/shop/new" component={NewShop} />
                 <PrivateRoute exact path="/seller/:shopId/:productId/edit" component={EditProduct}/>
+                <PrivateRoute exact path="/seller/orders/:shop/:shopId" component={ShopOrders}/>
                 <PrivateRoute exact path="/seller/shop/edit/:shopId" component={EditShop}/>
                 <PrivateRoute path="/seller/:shopId/products/new" component={NewProduct} />
                 <PrivateRoute path="/seller/shops" component={MyShops} />

@@ -60,7 +60,6 @@ const read = (req,res) => {
 }
 
 const update = async (req,res) => {
-    console.log("Reaching the update router ")
     try{
         let user = req.profile
         user = extend(user,req.body)
@@ -92,7 +91,12 @@ const remove = async (req,res) => {
     }
 }
 
+const createCharge = async (req,res,next) => {
+        console.log("success")
+        next()
+}
+
 
 export default {
-    create,userByID,read,
+    create,userByID,read,createCharge,
     list,remove,update,isSeller}

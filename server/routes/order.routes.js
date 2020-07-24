@@ -7,16 +7,37 @@ import shopCtrl from "../controllers/shop.controller"
 
 const router = express.Router()
 
-
+// Creates a new order
 router.route("/api/order/:userId")
       .post(authCtrl.requireSignin,
         productCtrl.decreaseQuantity,orderCtrl.create)
 
+// list the amount of order that a shop has
+// /api/orders/shop/${params.shopId} 
 router.route('/api/orders/shop/:shopId').get(authCtrl.requireSignin,
                 shopCtrl.isOwner,orderCtrl.listByShop)
 
+// Get the list of available statuses
+router.route('api/order/status_values')
+      .get(orderCtrl.getStatusValues)
+// Update a certain order
+router.route('/api/order/status/:shopId')
+      .put(authCtrl.requireSignin,shopCtrl.isOwner,
+        orderCtrl.update)
+
+// For a cancelled order
+router.route('/api/order/:shopId/cancel/:productId').put(authCtrl.requireSignin,
+  shopCtrl.isOwner,productCtrl.increaseQuantity,
+  orderCtrl.update)
+
+// For processing charge
+router.route('/api/order/:orderId/charge/:userId/:shopId')
+      .put(authCtrl.requireSignin,shopCtrl.isOwner,
+        userCtrl.createCharge,orderCtrl.update)
 
 router.param('userId',userCtrl.userByID)
 router.param('shopId',shopCtrl.shopByID)
+router.param('orderId',orderCtrl.orderByID)
+router.param('productId',productCtrl.productByID)
 
 export default router

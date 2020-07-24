@@ -191,10 +191,22 @@ const decreaseQuantity = async (req,res,next) => {
     })
   }
 }
-  
-  
+
+const increaseQuantity = async (req,res,next) => {
+  try{
+    await Product.findByIdAndUpdate(req.body.product._id,
+      {'$inc':{"quantity":req.body.quantity}},{new:true}).exec()
+      next()
+  }catch(err){
+    console.log("an err occurred",err)
+    return res.status(401).json({
+      error:errorHandler.getErrorMessage(err)
+    })
+  }
+}
+
 
 export default {
-    create,listByShop,defaultPhoto,read,update,listCategories,
+    create,listByShop,defaultPhoto,read,update,listCategories,increaseQuantity,
     productByID,photo,listLatest,listRelated,remove,list,decreaseQuantity
 }

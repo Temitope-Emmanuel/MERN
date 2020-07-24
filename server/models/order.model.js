@@ -19,7 +19,6 @@ const CartItemSchema = new mongoose.Schema({
 
 const CartItem = mongoose.model("CartItem",CartItemSchema)
 
-
 const OrderSchema = new mongoose.Schema({
     customer_name:{
         type:String,
@@ -36,6 +35,10 @@ const OrderSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:"User"
     },
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref:"User"
+    },
     delivery_address: {
         street: {type: String, required: 'Street is required'},
         city: {type: String, required: 'City is required'},
@@ -44,7 +47,14 @@ const OrderSchema = new mongoose.Schema({
         country: {type: String, required: 'Country is required'}
     },
     payment_id:{},
-    products:[CartItemSchema]    
+    products:[CartItemSchema],
+    created:{
+        type:Date,
+        default:Date.now
+    },
+    updated:Date
 })
 
-export default mongoose.model("Order",OrderSchema)
+const Order = mongoose.model("Order",OrderSchema)
+
+export {CartItem,Order}
