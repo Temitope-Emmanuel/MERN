@@ -61,9 +61,10 @@ export const update = async (params,product) => {
         console.log(err)
     }
 };
-export const cancelProduct = async (params,credentials,product) => {
+export const cancelProduct = async (params,product) => {
     try{
-        let response = await fetch(`/api/order/${params.shopId}/cancel/${params.productId}`,{
+        let response = await fetch(
+            `/api/order/${params.shopId}/cancel/${params.productId}`,{
             method:"PUT",
             headers:{
                 Accept:"application/json",

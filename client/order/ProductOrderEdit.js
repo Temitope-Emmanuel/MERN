@@ -9,7 +9,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 import Divider from '@material-ui/core/Divider'
 import {isAuthenticated} from './../auth/auth-helper'
-import { update } from 'lodash'
 import {getStatusValues, update, cancelProduct, processCharge} from './api-order.js'
 
 const useStyles = makeStyles(theme => ({
@@ -53,20 +52,20 @@ const ProductOrderEdit = (props) => {
     })
     const jwt = isAuthenticated()
 
-    // useEffect(() => {
-    //     const abortController = new AbortController()
-    //     const signal = abortController.signal
-    //     getStatusValues(signal).then((data) => {
-    //         if(data.error){
-    //             setValues({...values,error:"Could not get status"})
-    //         }else{
-    //             setValues({...values,statusValues:data,error:''})
-    //         }
-    //     })
-    //     return function cleanup(){
-    //         abortController.abort()
-    //     }
-    // },[])
+    useEffect(() => {
+        const abortController = new AbortController()
+        const signal = abortController.signal
+        getStatusValues(signal).then((data) => {
+            if(data.error){
+                setValues({...values,error:"Could not get status"})
+            }else{
+                setValues({...values,statusValues:data,error:''})
+            }
+        })
+        return function cleanup(){
+            abortController.abort()
+        }
+    },[])
 
     const handleStatusChange = prodIdx => evt => {
         let {order} = props
@@ -156,11 +155,11 @@ const ProductOrderEdit = (props) => {
                                 label="Update Status"
                                 className={classes.textField}
                                 value={item.status}
-                                onChange={handleStatusChange(index)}
+                                onChange={handleStatusChange(idx)}
                                 SelectProps={{
                                 MenuProps: {
                                     className: classes.menu,
-                                },
+                                }
                                 }}
                                 margin="normal"
                             >

@@ -28,7 +28,6 @@ const listByShop = async (req,res) => {
     }
 }
 const getStatusValues = async (req,res) => {
-    console.log(CartItem.schema.path("status"))
     res.json(CartItem.schema.path('status').enumValues)
 }
 const update = async (req,res) => {
@@ -40,6 +39,7 @@ const update = async (req,res) => {
                     'products.$.status':req.body.status
                 }
             })
+            console.log("sucess",order)
         res.json(order)
     }catch(err){
         console.log("there's been an error",err)
