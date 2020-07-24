@@ -1,6 +1,6 @@
 export const create = async (params,order) => {
     try{
-        let response = await fetch(`/api/order/${params.userId}`,{
+        let response = await fetch(`/api/orders/${params.userId}`,{
             method:'POST',
             headers:{
                 'Accept':"application/json",
@@ -95,3 +95,19 @@ export const processCharge = async (params,product) => {
         console.log(err)
     }
 };
+export const listByUser = async (params,signal) => {
+    try{
+        const response = await fetch(`/api/orders/user/${params.userId}`,{
+            method:'GET',
+            headers:{
+                "Accept":'application/json',
+                "Content-Type":'application/json',
+                Authorization:`Bearer ${params.token}`
+            },
+            signal
+        })
+        return response.json()
+    }catch(err){
+        console.log(err)
+    }
+}
