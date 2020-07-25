@@ -21,7 +21,7 @@ import Product from "./product/Product"
 import EditProduct from "./product/EditProduct"
 
 import Cart from "./cart/Cart"
-import ShopOrders from "./order/shopOrders.js"
+import ShopOrders from "./order/ShopOrders"
 import Order from "./order/Order"
 
 import NewAuction from "./auction/NewAuction"
