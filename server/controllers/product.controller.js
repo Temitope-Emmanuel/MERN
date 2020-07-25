@@ -1,4 +1,4 @@
-import Product from '../models/product.model'
+import Product from '../models/Product.model'
 import extend from 'lodash/extend'
 import errorHandler from './../helpers/dbErrorHandler'
 import formidable from 'formidable'
