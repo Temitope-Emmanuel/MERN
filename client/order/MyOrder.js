@@ -42,7 +42,6 @@ const MyOrder = () => {
             if(data.error){
                 console.log(data.error)
             }else{
-                console.log("success",data)
                 setOrders(data)
             }
         })
@@ -74,7 +73,7 @@ const MyOrder = () => {
                         </span>
                     ))}
                 </List>
-            ) : <Typography variant="body1" >You don't have any order </Typography>}
+            ) : <Typography style={{textAlign:"center"}}  variant="body1" >You don't have any order </Typography>}
         </Paper>
     )
 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {isAuthenticated} from "../auth/auth-helper"
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -14,13 +14,15 @@ import Edit from '@material-ui/icons/Edit'
 import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
-// import DeleteUser from './DeleteUser'
+import DeleteUser from './DeleteUser'
 import {read,update} from './api-user.js'
+import {listByBidder,listByOpen,listBySeller} from "../auction/api-auction"
 import {Redirect, Link} from 'react-router-dom'
 import NewShop from "../shop/NewShop"
-import config from '../../config/config'
-import stripeButton from "../assets/images/stripeButton.png"
+// import config from '../../config/config'
+// import stripeButton from "../assets/images/stripeButton.png"
 import MyOrder from "../order/MyOrder"
+import Auctions from "../auction/Auctions"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -46,8 +48,23 @@ const useStyles = makeStyles(theme => ({
 const Profile = ({match,history}) => {
     const classes = useStyles()
     const [user,setUser] = React.useState({})
+    const [auctions,setAuctions ]= React.useState([])
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
     const jwt = isAuthenticated()
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        const signal = abortController.signal
+        listByOpen(signal).then((data) => {
+            if(data.error){
+                // setRedirectToSignIn(true)
+                console.log(data.error)
+            }else{
+                console.log("success",data)
+                setAuctions(data)
+            }
+        })
+    },[])
 
     React.useEffect(() => {
         const abortController = new AbortController()
@@ -82,6 +99,13 @@ const Profile = ({match,history}) => {
           })
     }
 
+    const removeAuction = (auction) => {
+        const updatedAuctions = [auctions]
+        const idx = updatedAuctions.indexOf(auction)
+        updatedAuctions.splice(idx,1)
+        setAuctions([...updatedAuctions])
+    }
+
     if(redirectToSignIn){
         return <Redirect to="/signin" />
     }
@@ -109,21 +133,7 @@ const Profile = ({match,history}) => {
                                             <Edit/>
                                         </IconButton>
                                     </Link>
-                                    {/* {user?.seller && user.stripe_seller ? (
-                                        <Button disabled className={classes.stripe_connected}>
-                                            Stripe connected
-                                        </Button>
-                                    ) : (
-                                        (
-                                        // <a href={"https://connect.stripe.com/oauth/authorize?response_type=code&client_id="+config.stripe_connect_test_client_id+"&scope=read_write"}
-                                        //  className={classes.stripe_connect}>
-                                        //      <img src={stripeButton}/>
-                                        // </a>
-                                        <Button className={classes.stripe_connect} >
-                                            <img src={stripeButton} />
-                                        </Button>
-                                        )
-                                )} */}
+                                    <DeleteUser userId={user._id} />
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>
@@ -133,9 +143,15 @@ const Profile = ({match,history}) => {
                             new Date(user.created)).toDateString()}/>
                     </ListItem>
                 </List>
-        </Paper>
         <MyOrder/>
-        {jwt.user?.seller && <NewShop/> }
+        <Paper className={classes.auctions} elevation={4} >
+            <Typography type="title" color="primary" >  
+            Auctions you bid in
+            </Typography>
+            <Auctions auctions={auctions}
+             removeAuction={removeAuction} />
+        </Paper>
+        </Paper>
         </>
         )
 }

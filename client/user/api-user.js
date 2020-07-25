@@ -61,14 +61,14 @@ export const create = async (user) => {
     }
   }
   
-  const remove = async (params, credentials) => {
+  const remove = async (params) => {
     try {
       let response = await fetch('/api/user/' + params.userId, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + credentials.t
+          'Authorization': 'Bearer ' + params.token
         }
       })
       return await response.json()

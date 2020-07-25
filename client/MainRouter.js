@@ -24,6 +24,8 @@ import Cart from "./cart/Cart"
 import ShopOrders from "./order/shopOrders.js"
 import Order from "./order/Order"
 
+import NewAuction from "./auction/NewAuction"
+import Auction from "./auction/Auction"
 const MainRouter = () => {
     return(
         <>
@@ -36,13 +38,18 @@ const MainRouter = () => {
                 <Route exact path="/order/:orderId" component={Order} />
                 <Route exact path="/product/:productId" component={Product} />
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+                <Route exact path="/user/:userId" component={Profile} />
+                
                 <PrivateRoute path="/seller/shop/new" component={NewShop} />
                 <PrivateRoute exact path="/seller/:shopId/:productId/edit" component={EditProduct}/>
                 <PrivateRoute exact path="/seller/orders/:shop/:shopId" component={ShopOrders}/>
                 <PrivateRoute exact path="/seller/shop/edit/:shopId" component={EditShop}/>
                 <PrivateRoute path="/seller/:shopId/products/new" component={NewProduct} />
                 <PrivateRoute path="/seller/shops" component={MyShops} />
-                <Route exact path="/user/:userId" component={Profile} />
+                
+                <PrivateRoute path="/auction/:auctionId" component={Auction} />
+                <PrivateRoute path="/auction/new" component={NewAuction} />
+                
                 <Route exact path="/shops/all" component={Shops} />
                 <Route exact path="/shops/:shopId" component={Shop} />
                 <Route exact path="/" component={Home} />

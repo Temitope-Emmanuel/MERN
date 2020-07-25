@@ -32,7 +32,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1.2em'
   },
   addButton:{
-    float:'right'
+    float:'right',
+    "& a":{
+      textDecoration:"none"
+    },
+    "& button":{
+      margin:theme.spacing(0, .5)
+    }
   },
   leftIcon: {
     marginRight: "8px"
@@ -76,8 +82,14 @@ const MyShops = () => {
         <Typography type="title" className={classes.title}>
           Your Shops
           <span className={classes.addButton}>
-            <Link to="/seller/shop/new">
+            <Link to="/auction/new">
               <Button color="primary" variant="contained">
+                {/* <Icon className={classes.leftIcon}>add_box</Icon> */}
+                Create A New Auction
+              </Button>
+            </Link>
+            <Link to="/seller/shop/new">
+              <Button color="secondary" variant="contained">
                 {/* <Icon className={classes.leftIcon}>add_box</Icon> */}
                 New Shop
               </Button>

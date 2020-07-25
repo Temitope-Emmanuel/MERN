@@ -17,14 +17,15 @@ const DeletedUser = (props) => {
     const [open,setOpen] = React.useState(false)
     const [redirect,setRedirect] = React.useState(false)
 
-    const clickButton = () => {
+    const handleToggle = () => {
         setOpen(!open)
     }
     const deleteAccount = () => {
         const jwt = isAuthenticated()
         remove({
-            userId:props.userId
-        },{token:jwt.token}).then((data) => {
+            userId:props.userId,
+            token:jwt.token
+        }).then((data) => {
             if(data && data.error){
                 console.log(data.error)
             }else{
@@ -39,11 +40,12 @@ const DeletedUser = (props) => {
 
     return (
       <span>
-        <IconButton aria-label="Delete" onClick={clickButton} color="secondary">
+        <IconButton aria-label="Delete" onClick={handleToggle}
+         color="secondary">
           <DeleteIcon/>
         </IconButton>
   
-        <Dialog open={open} onClose={handleRequestClose}>
+        <Dialog open={open} onClose={handleToggle}>
           <DialogTitle>{"Delete Account"}</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -51,10 +53,11 @@ const DeletedUser = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleRequestClose} color="primary">
+            <Button onClick={handleToggle} color="primary">
               Cancel
             </Button>
-            <Button onClick={deleteAccount} color="secondary" autoFocus="autoFocus">
+            <Button onClick={deleteAccount} color="secondary"
+             autoFocus="autoFocus">
               Confirm
             </Button>
           </DialogActions>

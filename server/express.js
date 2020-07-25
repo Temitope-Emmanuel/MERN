@@ -20,6 +20,7 @@ import authRoutes from "./routes/auth.routes"
 import shopRoutes from "./routes/shop.routes"
 import productRoutes from "./routes/product.routes"
 import orderRoutes from "./routes/order.routes"
+import auctionRoutes from "./routes/auction.routes"
 
 import devBundle from './devBundle'
 
@@ -40,6 +41,7 @@ app.use(helmet())
 app.use(cors())
 
 
+app.use("/",auctionRoutes)
 app.use("/",userRoutes)
 app.use("/",authRoutes)
 app.use("/",shopRoutes)
