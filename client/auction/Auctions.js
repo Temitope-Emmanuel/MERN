@@ -69,7 +69,6 @@ const Auctions = (props) => {
             </span>
         )
     }
-    console.log(props.auctions[0]?.seller._id == jwt.user._id)
     return(
         <List dense>
             {props.auctions.map((auction,i) => (
@@ -87,7 +86,7 @@ const Auctions = (props) => {
                                     <ViewIcon/>
                                 </IconButton>
                             </Link>
-                            {jwt.user._id == auction.seller._id &&
+                            {jwt && jwt.user._id == auction.seller._id &&
                                <>
                                <Link to={`/auction/edit/${auction._id}`}>
                                    <IconButton aria-label="Edit" color="primary">

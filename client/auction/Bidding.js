@@ -6,8 +6,6 @@ import {isAuthenticated} from '../auth/auth-helper'
 import Grid from '@material-ui/core/Grid'
 import {makeStyles} from '@material-ui/core/styles'
 
-// const io = require("socket.io-client")
-// const socket = io()
 const useStyles = makeStyles(theme => ({
     bidHistory: {
         marginTop: '20px',
@@ -26,6 +24,8 @@ const useStyles = makeStyles(theme => ({
         margin: '8px 16px 16px'
     }
 }))
+const io = require("socket.io-client")
+const socket = io()
 
 
 const Bidding = (props) => {
@@ -33,32 +33,51 @@ const Bidding = (props) => {
     const [bid,setBid] = useState('')
     const jwt = isAuthenticated()
 
-    // useEffect(() => {
-    //     socket.emit('join auction room',{room:props.auction._id})
-    //     return() => {
-    //         socket.emit('leave auction room',{
-    //             room:props.auction._id
-    //         })
-    //     }
-    // },[])
-    // useEffect(() => {
-    //     socket.on('new bid',payload => {
-    //         props.updateBids(payload)
-    //     })
-    //     return () => {
-    //         socket.off('new bid')
-    //     }
-    // })
-    // const handleChange = evt => {
-    //     setBid(evt.target.value)
-    // }
+    useEffect(() => {
+        socket.emit('join auction room',{
+            room:props.auction._id
+        })
+        return() => {
+            socket.emit('leave auction room',{
+                room:props.auction._id
+            })
+        }
+    },[])
+    useEffect(() => {
+        socket.on('new bid',payload => {
+            console.log("this was called",payload)
+            props.updateBids(payload)
+        })
+        return () => {
+            socket.off('new bid')
+        }
+    })
+    const placeBid = () => {
+        let newBid = {
+            bid,
+            time:new Date(),
+            bidder:jwt.user
+        }
+        socket.emit('new bid',{
+            room:props.auction._id,
+            bidInfo:newBid
+        })
+        setBid('')
+    }
+    const handleChange = evt => {
+        setBid(evt.target.value)
+    }
+    console.log(props.auction.bids)
+    const minBid = props.auction.bids.length > 0 
+                    ? props.auction.bids[0].bid :
+                     props.auction.startingBid
 
     return(
         <div>
-            {!props.justEnded && new Date() < new Date(props.auction.bidEnd) && 
-            <div className={classes.placeForm}>
+            {!props.justEnded && new Date() < new Date(props.auction.bidEnd)
+             && <div className={classes.placeForm}>
                 <TextField id="bid" label="Your bid ($)"
-                value={bid} onChange={handleChange}
+                value={bid} onChange={handleChange} type="number"
                 helperText={`Enter $${Number(minBid)+1} or more`}
                 className={classes.marginInput}
                 /><br/>
@@ -69,26 +88,44 @@ const Bidding = (props) => {
                 </Button>
             </div>}
             <div className={classes.bidHistory}>
-                <Typography variant="h6" >
-                    All bids
-                </Typography><br/>
+                <Typography variant="h6">All bids</Typography><br/>
                 <Grid container spacing={4}>
-                    <Grid item xs={3} sm={4}>
+                    <Grid item xs={3} sm={3}>
                         <Typography variant="subtitle1" color="primary">
                             Bid Amount
                         </Typography>
                     </Grid>
                     <Grid item xs={5} sm={5}>
-                        <Typography variant="subtitle1" color="primary" >
+                        <Typography variant="subtitle1" color="primary">
                             Bid Time
                         </Typography>
                     </Grid>
                     <Grid item xs={4} sm={4}>
-                        <Typography variant="subtitle1" color="primary" >
+                        <Typography variant="subtitle1" color="primary">
                             Bidder
                         </Typography>
                     </Grid>
-                </Grid>
+                </Grid>    
+                    {props.auction.bids.map((item, index) => {
+                        return <Grid container spacing={4} key={index}>
+                            <Grid item xs={3} sm={3}>
+                                <Typography variant="body2">
+                                    ${item.bid}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={5} sm={5}>
+                                <Typography variant="body2">
+                                    {new Date(item.time).toLocaleString()}
+                                    </Typography>
+                            </Grid>
+                            <Grid item xs={4} sm={4}>
+                                <Typography variant="body2">
+                                    {item.bidder.name}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    })}
+                
             </div>
         </div>
     )

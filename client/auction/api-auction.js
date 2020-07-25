@@ -41,7 +41,7 @@ export const listByBidder = async (params) => {
         console.log(err)
     }
 }
-export const listBySeller = async (params) => {
+export const listBySeller = async (params,signal) => {
     try{
         const response = await fetch(`/api/auctions/by/${params.userId}`,{
             method:'GET',
@@ -49,7 +49,8 @@ export const listBySeller = async (params) => {
                 Accept:'application/json',
                 'Content-Type':'application/json',
                 Authorization:`Bearer ${params.token}`
-            }
+            },
+            signal
         })
         return response.json()
     }catch(err){

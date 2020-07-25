@@ -1,6 +1,7 @@
 import config from "../config/config"
 import app from "./express"
 import mongoose from "mongoose"
+import bidding from "./controllers/bidding.controller"
 mongoose.Promise = global.Promise
 
 mongoose.connect(config.mongoUri,{
@@ -14,9 +15,10 @@ mongoose.connection.on("error",() => {
     throw new Error(`unable to connect to database: ${config.mongoUri}`)
 })
 
-app.listen(config.PORT,err =>{
+const server = app.listen(config.PORT,err =>{
     if(err){
         console.log(err)
     }
     console.info("Server started on port %s",config.PORT)
 })
+bidding(server)

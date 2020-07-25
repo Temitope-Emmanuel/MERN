@@ -16,9 +16,8 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import DeleteUser from './DeleteUser'
 import {read,update} from './api-user.js'
-import {listByBidder,listByOpen,listBySeller} from "../auction/api-auction"
+import {listBySeller} from "../auction/api-auction"
 import {Redirect, Link} from 'react-router-dom'
-import NewShop from "../shop/NewShop"
 // import config from '../../config/config'
 // import stripeButton from "../assets/images/stripeButton.png"
 import MyOrder from "../order/MyOrder"
@@ -41,6 +40,16 @@ const useStyles = makeStyles(theme => ({
   stripe_connected: {
     verticalAlign: 'super',
     marginRight: '10px'
+  },
+  auctions:{
+      display:"flex",
+      justifyContent:"space-between",
+      alignItems:"center",
+      padding:theme.spacing(1.3,1),
+      width:"100%",
+      "& a":{
+          textDecoration:"none"
+      }
   }
 }))
 
@@ -55,7 +64,10 @@ const Profile = ({match,history}) => {
     useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
-        listByOpen(signal).then((data) => {
+        listBySeller({
+            userId:jwt.user._id,
+            token:jwt.token
+        },signal).then((data) => {
             if(data.error){
                 // setRedirectToSignIn(true)
                 console.log(data.error)
@@ -100,6 +112,7 @@ const Profile = ({match,history}) => {
     }
 
     const removeAuction = (auction) => {
+        console.log(auction)
         const updatedAuctions = [auctions]
         const idx = updatedAuctions.indexOf(auction)
         updatedAuctions.splice(idx,1)
@@ -124,7 +137,7 @@ const Profile = ({match,history}) => {
                         </ListItemAvatar>
                         <ListItemText primary={user.name}
                          secondary={user.email}/>
-                        {jwt.user?._id ==
+                        { jwt && jwt.user._id ==
                             user._id && 
                             (<ListItemSecondaryAction>
                                     <Link to={"/user/edit/" + user._id} >
@@ -133,7 +146,7 @@ const Profile = ({match,history}) => {
                                             <Edit/>
                                         </IconButton>
                                     </Link>
-                                    <DeleteUser userId={user._id} />
+                                    <DeleteUser userId={user._id}/>
                                 </ListItemSecondaryAction>
                             )}
                     </ListItem>
@@ -145,9 +158,15 @@ const Profile = ({match,history}) => {
                 </List>
         <MyOrder/>
         <Paper className={classes.auctions} elevation={4} >
-            <Typography type="title" color="primary" >  
-            Auctions you bid in
+            <Typography style={{display:"inline"}} type="title" color="primary" >  
+            Auctions you created
             </Typography>
+            <Link style={{display:"inline"}} to="/auction/new">
+              <Button color="primary" variant="contained">
+                {/* <Icon className={classes.leftIcon}>add_box</Icon> */}
+                Create A New Auction
+              </Button>
+            </Link>
             <Auctions auctions={auctions}
              removeAuction={removeAuction} />
         </Paper>

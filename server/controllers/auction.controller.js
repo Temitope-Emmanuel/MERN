@@ -63,7 +63,6 @@ const defaultPhoto = (req,res) => {
     return res.sendFile(process.cwd()+defaultImage)
 }
 const listOpen = async (req,res) => {
-    console.log("successfully reaching by listOpen route")
     try{
         let auctions = await Auction.find({bidEnd:{$gt:new Date()}})
                               .sort('bidStart')
@@ -93,7 +92,6 @@ const listByBidder = async (req,res) => {
     }
 }
 const listBySeller = async (req,res) => {
-    console.log("successfully reaching by seller route")
     try{
         const auctions = await Auction.find({seller:req.profile._id})
                                 .populate('seller','_id name')
@@ -144,10 +142,12 @@ const update = async (req,res) => {
   })
 }
 const remove = async (req,res) => {
+    console.log("successfull reaching")
     try{
         const deletedAuction = await  req.auction.remove()
         res.json(deletedAuction)
     }catch(err){
+        console.log("there was an err",err)
         return res.status(400).json({
             error:errorHandler.getErrorMessage(err)
         })

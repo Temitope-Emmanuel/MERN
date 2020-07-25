@@ -26,6 +26,7 @@ import Order from "./order/Order"
 
 import NewAuction from "./auction/NewAuction"
 import Auction from "./auction/Auction"
+
 const MainRouter = () => {
     return(
         <>
@@ -47,8 +48,8 @@ const MainRouter = () => {
                 <PrivateRoute path="/seller/:shopId/products/new" component={NewProduct} />
                 <PrivateRoute path="/seller/shops" component={MyShops} />
                 
-                <PrivateRoute path="/auction/:auctionId" component={Auction} />
                 <PrivateRoute path="/auction/new" component={NewAuction} />
+                <Route path="/auction/:auctionId" component={Auction} />
                 
                 <Route exact path="/shops/all" component={Shops} />
                 <Route exact path="/shops/:shopId" component={Shop} />

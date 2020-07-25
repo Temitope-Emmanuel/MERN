@@ -32,6 +32,7 @@ const DeleteAuction = (props) => {
     })
   }
 
+  console.log(props)
   return(
       <span>
           <IconButton aria-label="Delete" onClick={handleToggle}

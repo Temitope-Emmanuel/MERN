@@ -8,8 +8,8 @@ import {makeStyles} from '@material-ui/core/styles'
 import {read} from './api-auction.js'
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from '../auth/auth-helper'
-// import Timer from './Timer'
-// import Bidding from './Bidding'
+import Timer from './Timer'
+import Bidding from './Bidding'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,9 +71,6 @@ const Auction = ({match}) => {
     const classes = useStyles()
     const [auction,setAuction] = useState({})
     const [justEnded,setJustEnded] = useState(false)
-    const updatedBids = () => {
-        setJustEnded(true)
-    }
     const [alert,setAlert] = useState({
         error:'',
         justEnded:false
@@ -97,6 +94,13 @@ const Auction = ({match}) => {
             abortController.abort()
         }
     },[match.params.auctionId])
+
+    const update = auction => {
+        setJustEnded(true)
+    }
+    const updateBids = (updatedAuction) => {
+        setAuction(updatedAuction)
+    }
 
         const imageUrl = auction._id
           ? `/api/auctions/image/${auction._id}?${new Date().getTime()}`
@@ -140,8 +144,8 @@ const Auction = ({match}) => {
                         <Grid item xs={7} sm={7}>
                             {currentDate > new Date(auction.bidStart) ? (
                                 <>
-                                {/* <Timer endTime={auction.bidEnd}
-                                 update={update} /> */}
+                                <Timer endTime={auction.bidEnd}
+                                 update={update} />
                                  {
                                      auction.bids.length > 0 && 
                                      <Typography component="p" variant="subtitle1"
@@ -155,9 +159,10 @@ const Auction = ({match}) => {
                                      </Link>
                                      To place your bid
                                      </Typography>}
-                                 {/* {jwt && <Bidding auction={auction}
-                                  justEnded={justEnded}
-                                   updateBids={updateBids} />} */}
+                                {jwt && <Bidding 
+                                   auction={auction}
+                                   justEnded={justEnded}
+                                   updateBids={updateBids} />}
                                 </>
                             ):<Typography component="p" variant="h6">
                                 {`Auction Starts at 
