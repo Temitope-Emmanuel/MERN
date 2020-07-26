@@ -20,7 +20,7 @@ const Menu = ({history}) => (
     <AppBar position="static" >
         <Toolbar>
             <Typography variant="h6" color="inherit" >
-                MERN Skeleton
+                MERN SOCIAL
             </Typography>
             <Link to="/" >
                 <IconButton aria-label="Home" 
