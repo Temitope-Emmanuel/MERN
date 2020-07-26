@@ -26,7 +26,6 @@ const app = express()
 const CURRENT_WORKING_DIR = process.cwd()
 
 
-IAcfdYhHX3Ixjh0u
 // Only for development
 // devBundle.compile(app)
 
