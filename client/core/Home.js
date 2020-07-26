@@ -1,17 +1,14 @@
 import React,{useState,useEffect} from "react"
 import {makeStyles} from "@material-ui/core/styles"
 import Card from '@material-ui/core/Card'
-import Box from '@material-ui/core/Box'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
-import unicornbikeImg from './../assets/images/unicornbike.jpg'
 import {Link} from "react-router-dom"
 import {isAuthenticated} from "../auth/auth-helper"
 import Courses from "../course/Courses"
 import {listPublished} from "../course/api-course"
 import {listEnrolled} from "../enrollment/api-enrollment"
 import Enrollments from "../enrollment/Enrollments"
+import config from "../../config/config"
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -75,6 +72,7 @@ const Home = () => {
     const [courses,setCourses] = useState([])
     const [ enrolled,setEnrolled] = useState([])
     useEffect(() => {
+      if(jwt){
       const abortController = new AbortController()
       const signal = abortController.signal
       listEnrolled(
@@ -89,6 +87,7 @@ const Home = () => {
       return function cleanup(){
         abortController.abort()
       }
+    }
     }, [])
     
 
@@ -100,18 +99,19 @@ const Home = () => {
                 console.log(data.error)
             }else{
                 setCourses(data)
+              }
+            })
+            return function cleanup(){
+              abortController.abort()
             }
-        })
-        return function cleanup(){
-            abortController.abort()
-        }
-    },[])
-
-    return(
+          },[])
+          
+return(
         <div className={classes.extraTop}>
-           {jwt.user && (
+           {jwt.user ?  (
       <Card className={`${classes.card} ${classes.enrolledCard}`}>
-        <Typography variant="h6" component="h2" className={classes.enrolledTitle}>
+        <Typography variant="h6" component="h2"
+         className={classes.enrolledTitle}>
             Courses you are enrolled in
         </Typography>
         {enrolled.length != 0 ? 
@@ -122,7 +122,9 @@ const Home = () => {
          </Typography>)
         }
       </Card>
-      )}
+      ) : <Typography variant="h5" component="h2" >
+        Please Login To Start 
+          </Typography>}
       <Card  className={classes.card}>
           <Typography variant="h5" component="h2" >
               Published Courses

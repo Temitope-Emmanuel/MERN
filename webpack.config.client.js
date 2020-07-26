@@ -17,6 +17,9 @@ const config = {
         filename: 'bundle.js',
         publicPath: '/dist/'
     },
+    node:{
+        fs:'empty'
+    },
     module: {
         rules: [
             // to use the babel loader

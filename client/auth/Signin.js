@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import {authenticate} from './../auth/auth-helper'
+import {authenticate,isAuthenticated} from './../auth/auth-helper'
 import {Redirect} from 'react-router-dom'
 import {signin} from "./api-auth"
 
@@ -49,6 +49,7 @@ const Signin = (props) => {
         submit:true,
         redirectToReferrer:false
     })
+    const jwt = isAuthenticated()
 
     React.useEffect(() => {
         const isSubmit = isValid()
@@ -87,6 +88,9 @@ const Signin = (props) => {
             }
         }    
         return <Redirect to={from} />
+    }
+    if(jwt){
+      return <Redirect to={`/user/${jwt.user._id}`} />
     }
 
     return (

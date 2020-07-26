@@ -93,7 +93,7 @@ const Profile = ({match}) => {
                     </ListItem>
                 </List>
         </Paper>
-        <NewCourse/>
+        {jwt.user.educator && <NewCourse/>}
         </>
         )
 }

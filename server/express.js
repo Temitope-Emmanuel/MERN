@@ -20,14 +20,14 @@ import authRoutes from "./routes/auth.routes"
 import courseRoutes from "./routes/course.routes"
 import enrollmentRoutes from "./routes/enrollment.routes"
 
-// import devBundle from './devBundle'
+import devBundle from './devBundle'
 
 const app = express()
 const CURRENT_WORKING_DIR = process.cwd()
 
 
 // Only for development
-// devBundle.compile(app)
+devBundle.compile(app)
 
 
 app.use(bodyParser.json())

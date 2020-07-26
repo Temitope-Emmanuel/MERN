@@ -162,7 +162,7 @@ const EditCourse = ({match}) => {
      }
 
     if (alert.redirect) {
-        return (<Redirect to={'/teach/course/'+course._id}/>)
+        return (<Redirect to={`/course/${course._id}`}/>)
       }
         const imageUrl = course._id
               ? `/api/courses/photo/${course._id}?${new Date().getTime()}`
@@ -228,11 +228,22 @@ const EditCourse = ({match}) => {
           </div>
           <Divider/>
           <div>
+                {course.lessons.length > 0 ?
                 <CardHeader
-                  title={<Typography variant="h6" className={classes.subheading}>Lessons - Edit and Rearrange</Typography>
-                }
-                  subheader={<Typography variant="body1" className={classes.subheading}>{course.lessons && course.lessons.length} lessons</Typography>}
-                />
+                title={
+                <Typography variant="h6"
+                 className={classes.subheading}>Lessons - Edit and Rearrange
+                 </Typography>
+               }
+                subheader={<Typography variant="body1" className={classes.subheading}>{course.lessons && course.lessons.length} lessons</Typography>}
+              /> : 
+              <CardHeader
+                  title={
+                  <Typography variant="h6"
+                   className={classes.subheading}>Add Lessons
+                   </Typography>
+                 }
+                />}
                 <List>
                 {course.lessons && course.lessons.map((lesson, index) => {
                     return(<span key={index}>

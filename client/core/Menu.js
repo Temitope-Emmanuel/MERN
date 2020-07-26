@@ -8,7 +8,21 @@ import Library from '@material-ui/icons/LocalLibrary'
 import Button from '@material-ui/core/Button'
 import {isAuthenticated,clearJWT} from './../auth/auth-helper'
 import {Link, withRouter} from 'react-router-dom'
+import {withStyles} from "@material-ui/core/styles"
 
+
+const styles = {
+    link:{
+        display:"flex",
+        flexDirection:"row",
+        justifyContent:"center",
+        alignItems:"center",
+        color:"black",
+        textDecoration:"none",
+        textTransform:"capitalize !important",
+        letterSpacing:".13em"
+    }
+}
 
 const isActive = (history,path) => {
     if(history.location.pathname == path)
@@ -24,13 +38,13 @@ const isPartActive = (history, path) => {
   }
   
 
-const Menu = ({history}) => (
+const Menu = ({history,classes}) => (
     <AppBar style={{zIndex:"5000 !important"}}  position="static" elevation="10" >
         <Toolbar style={{zIndex:"5000 !important"}}>
-            <Typography variant="h6" color="inherit" >
-                CLASSROOM APP
-            </Typography>
-            <Link to="/" >
+            <Link className={classes.link} to="/" >
+                     <Typography variant="h6" color="inherit" >
+                        Classroom App
+                    </Typography>
                 <IconButton aria-label="Home" 
                  style={isActive(history,"/")} >
                      <HomeIcon/>
@@ -74,4 +88,4 @@ const Menu = ({history}) => (
     </AppBar>
 )
 
-export default withRouter(Menu)
+export default withRouter(withStyles(styles)(Menu))

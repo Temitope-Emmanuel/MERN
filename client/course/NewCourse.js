@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: 'auto',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textDecoration:"none"
   },
   input: {
     display: 'none'
@@ -56,9 +57,21 @@ const NewCourse = () => {
     })
     const [alert,setAlert] = useState({
         redirect: false,
-        error: ''
+        error: '',
+        submitting:false,
+        submit:false
     })
   const jwt = isAuthenticated()
+
+  React.useEffect(() => {
+    const isSubmit = isValid()
+    setAlert({...alert,submit:!isSubmit})
+  },[values])
+
+  const isValid = () => {
+    return ["name","description","category"].every(
+        (i) => values[i].length > 3 )
+  }
 
   const handleChange = name => event => {
     const value = name === 'image'
@@ -67,6 +80,7 @@ const NewCourse = () => {
     setValues({...values, [name]: value })
   }
   const clickSubmit = () => {
+    setAlert({...alert,submitting:true})
     let courseData = new FormData()
     values.name && courseData.append('name', values.name)
     values.description && courseData.append('description', values.description)
@@ -77,7 +91,7 @@ const NewCourse = () => {
       token: jwt.token
     },courseData).then((data) => {
       if (data.error) {
-        setAlert({...alert, error: data.error})
+        setAlert({...alert, error: data.error,submitting:false})
       } else {
         setAlert({...alert, error: '', redirect: true})
       }
@@ -129,8 +143,10 @@ const NewCourse = () => {
       </CardContent>
       <CardActions>
         <Button color="primary" variant="contained"
+         disabled={alert.submit || alert.submitting}
          onClick={clickSubmit} className={classes.submit}>
-           Submit</Button>
+           {alert.submitting ? "Creating a New Course" : "Create Course"}
+        </Button>
         <Link to='/teach/courses' className={classes.submit}><Button variant="contained">Cancel</Button></Link>
       </CardActions>
     </Card>

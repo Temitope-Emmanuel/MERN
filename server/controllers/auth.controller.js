@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken'
 
 
 const signin = async function(req,res){
-    console.log("Reaching")
     try{
         let user = await User.findOne({"email":req.body.email})
         if(!user){
@@ -32,7 +31,6 @@ const signin = async function(req,res){
     }
 }
 const signout = function(req,res){
-    console.log("Reaching")
     res.clearCookie("t")
     return res.status(200).json({
         message:"Signed out"
@@ -46,8 +44,9 @@ const requireSignin = expressJwt({
 })
 
 const hasAuthorization = function(req,res,next){
-    const authorized = req.profile && req.auth && req.profile._id == req.auth._id
+    const authorized = req.profile?._id == req.auth?._id
         if(!authorized){
+            console.log("user is not authorized")
             return res.status(403).json({
                 error:"User is not authorized to perform this action"
             })

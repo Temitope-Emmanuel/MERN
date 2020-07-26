@@ -8,6 +8,7 @@ import defaultImage from './../../client/assets/images/default.png'
 
 
 const create = (req, res) => {
+  console.log("called th controller")
     let form = new formidable.IncomingForm()
     form.keepExtensions = true
     form.parse(req, async (err, fields, files) => {
@@ -26,6 +27,7 @@ const create = (req, res) => {
         let result = await course.save()
         res.json(result)
       }catch (err){
+        console.log("there is an error",err)
         return res.status(400).json({
           error: errorHandler.getErrorMessage(err)
         })

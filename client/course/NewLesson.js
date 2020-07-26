@@ -28,8 +28,8 @@ const NewLesson = (props) => {
     })
     const [alert,setAlert] = useState({
         error:"",
-        submit:true
-
+        submit:true,
+        submitting:false
       })
       
       const handleToggle = () => {
@@ -42,6 +42,7 @@ const NewLesson = (props) => {
       const jwt = isAuthenticated()
 
       const clickSubmit = () => {
+        setAlert({...alert,submitting:true})
         const lesson = {
           title: values.title || undefined,
           content: values.content || undefined,
@@ -52,6 +53,7 @@ const NewLesson = (props) => {
           token: jwt.token
         }, lesson).then((data) => {
           if (data && data.error) {
+            setAlert({...alert,submitting:false})
             setValues({...values, error: data.error})
           } else {
               props.addLesson(data)
@@ -59,6 +61,7 @@ const NewLesson = (props) => {
               content: '',
               resource_url: ''})
               setOpen(false)
+              setAlert({...alert,submitting:false})
           }
         })
       }
@@ -109,9 +112,9 @@ const NewLesson = (props) => {
                color="primary" variant="contained">
                 Cancel
               </Button>
-              <Button onClick={clickSubmit} disabled={alert.submit}
+              <Button onClick={clickSubmit} disabled={alert.submit || alert.submitting}
                color="secondary" variant="contained">
-                Add
+                {alert.submitting ? "Creating new Lesson" : "Add"}
               </Button>
             </DialogActions>
             </div>

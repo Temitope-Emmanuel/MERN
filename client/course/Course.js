@@ -109,7 +109,6 @@ const Course = ({match}) => {
           if (data.error) {
             setValues({...values, error: data.error})
           } else {
-            console.log(data)
             setCourse(data)
           }
         })
@@ -143,6 +142,7 @@ const Course = ({match}) => {
               setValues({...values, error: data.error})
             } else {
               setCourse({...course, published: true})
+              setValues({...values,redirect:true})
               setOpen(false)
             }
         })
