@@ -11,4 +11,4 @@ const config = {
     stripe_test_secret_key:"sk_test_51H84iCHJ1zBczfLrEw5pdHrmTEyo3DYQyds1E8zEFMUp11ify3S8mmmIgCz1d90hfm1uj7veF26WQIFOSpwvH2VW00eBkaywhp",
     stripe_test_api_key:'pk_test_51H84iCHJ1zBczfLrgtoKcRcnoBs6GpIabvuJDHY9NXK09napgjLSDXLDZcsTJ2vc2GBplcigv6ivWErf3YaXIlLp00dgepJ47J'
 }
-    export default config
+export default config
