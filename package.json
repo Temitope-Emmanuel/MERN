@@ -5,7 +5,9 @@
   "author": "Temitope Emmanuel Ojo",
   "license": "MIT",
   "scripts": {
-    "development": "nodemon"
+    "development": "nodemon",
+    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
+    "start": "NODE_ENV=production node ./dist/server.generated.js"
   },
   "engines":{
     "node":"v12.16.3",
