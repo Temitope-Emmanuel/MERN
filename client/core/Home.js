@@ -14,6 +14,12 @@ const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
       margin: 30,
+      display:"flex",
+      justifyContent:"center",
+      width:"100%",
+      backgroundColor:"purple",
+      flexDirection:"column",
+      alignItems:"center"
     },
     card: {
       maxWidth: 600,
@@ -67,24 +73,27 @@ const Home = ({history}) => {
                                     </a> on Unsplash
                             </Typography>
                             <CardContent>
-                                <Typography type="h2" >
+                                <Typography type="h2" component="h2" >
                                     Welcome to the Mern Social home page
+                                </Typography>
+                                <Typography type="body1" >
+                                    Sign in and follow people to start
                                 </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
             )}
-            {jwt && (
-                <Grid container spacing={8}>
-                    <Grid item xs={8} sm={7} >
-                        <Newsfeed/>
-                    </Grid>
-                    <Grid item xs={6} sm={5} >
-                        <FindPeople/>
-                    </Grid>
-                </Grid>
-            )}
+            {jwt &&
+          <Grid container spacing={12}>
+            <Grid item xs={6} sm={6}>
+              <Newsfeed/>
+            </Grid>
+            <Grid item xs={6} sm={6}>
+              <FindPeople/>
+            </Grid>
+          </Grid>
+        }
         </div>
     )
 }

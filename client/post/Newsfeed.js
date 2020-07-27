@@ -69,9 +69,14 @@ const NewsFeed = (props) => {
             </Typography>
             <NewPost addUpdate={addPost} />
             <Divider/>
-            <PostList removeUpdate={removePost}
-            post={posts}
-             />
+            {posts.length > 0 ? (
+              <PostList removeUpdate={removePost}
+              post={posts}
+               />
+            ) : 
+            <Typography type="body1" align="center">
+              No Post to View. Follow People to view their post
+              </Typography>}
         </Card>
     )
 }

@@ -56,9 +56,7 @@ const Users = (props) => {
                     return <Link to={"/user/" + item._id} key={i}>
                         <ListItem button>
                         <ListItemAvatar>
-                            <Avatar>
-                                <Person/>
-                            </Avatar>
+                            <Avatar variant="round" style={{width:"4em",height:"4em"}}  src={`/api/users/photo/${item._id}?${new Date().getTime()}`} />
                         </ListItemAvatar>
                         <ListItemText primary={item.name}/>
                             <ListItemSecondaryAction>

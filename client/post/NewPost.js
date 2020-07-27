@@ -145,7 +145,8 @@ const NewPost = (props) => {
                 </CardContent>
                 <CardActions>
                     <Button color="primary" variant="contained"
-                      disabled={alert.submitting && values.text === ''} className={classes.submit}
+                      disabled={values.text === '' || alert.submitting}
+                       className={classes.submit}
                       onClick={clickPost}
                     >
                          POST

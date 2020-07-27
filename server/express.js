@@ -17,6 +17,7 @@ import theme from "../client/theme"
 
 import userRoutes from "./routes/user.routes"
 import authRoutes from "./routes/auth.routes"
+import postRoutes from "./routes/post.routes"
 
 // Comment out before building for production
 import devBundle from './devBundle'
@@ -42,6 +43,7 @@ app.use("/dist",express.static(path.join(CURRENT_WORKING_DIR,
     'dist')))
 app.use("/",userRoutes)
 app.use("/",authRoutes)
+app.use("/",postRoutes)
 
 // app.get("/",(req,res) => {
 //     return res.status(200).send(Template())

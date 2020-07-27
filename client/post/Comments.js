@@ -15,8 +15,8 @@ const useStyles = makeStyles(theme => ({
       paddingBottom: theme.spacing(1)
     },
     smallAvatar: {
-      width: 25,
-      height: 25
+      width: 55,
+      height: 55
     },
     commentField: {
       width: '96%'
@@ -101,7 +101,7 @@ const Comments = (props) => {
         <div>
             <CardHeader avatar={
             <Avatar
-            src={`/spi/users/photo/${jwt.user._id}`}
+            src={`/api/users/photo/${jwt.user._id}?${new Date().getTime()}`}
             className={classes.smallAvatar} />
         } title={
             <TextField
@@ -118,8 +118,8 @@ const Comments = (props) => {
             return(
                 <CardHeader 
                  avatar={
-                     <Avatar className={classes.smallAvatar}
-                     src={`/api/users/photo${item.postedBy._id}`}
+                     <Avatar className={classes.smallAvatar} variant="square"
+                     src={`/api/users/photo/${item.postedBy._id}?${new Date().getTime()}`}
                      />
                     } title={commentBody(item)} key={i}
                       className={classes.cardHeader}
