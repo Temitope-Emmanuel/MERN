@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import Edit from '@material-ui/icons/Edit'
 import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
+import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import DeleteUser from './DeleteUser'
 import {read,update} from './api-user.js'
@@ -45,11 +46,26 @@ const useStyles = makeStyles(theme => ({
       display:"flex",
       justifyContent:"space-between",
       alignItems:"center",
+      flexDirection:"column",
       padding:theme.spacing(1.3,1),
       width:"100%",
+      "& > div":{
+          display:'flex',
+          flexDirection:"row",
+          justifyContent:"space-between",
+          width:"100%",
+          alignItems:'center'
+      },
       "& a":{
           textDecoration:"none"
       }
+  },
+  auctionContainer:{
+      display:'flex',
+      flexDirection:"column",
+      justifyContent:"center",
+      alignItems:"center",
+      overflow:"hidden"
   }
 }))
 
@@ -61,6 +77,10 @@ const Profile = ({match,history}) => {
     const [redirectToSignIn,setRedirectToSignIn] = React.useState(false)
     const jwt = isAuthenticated()
 
+
+    if(!jwt){
+        return(<Redirect to="/signin" />)
+    }
     useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
@@ -123,7 +143,6 @@ const Profile = ({match,history}) => {
         return <Redirect to="/signin" />
     }
     return (
-        <>
         <Paper className={classes.root} elevation={4}>
                 <Typography variant="h6" className={classes.title}>
                     Profile
@@ -156,22 +175,27 @@ const Profile = ({match,history}) => {
                             new Date(user.created)).toDateString()}/>
                     </ListItem>
                 </List>
-        <MyOrder/>
+                {jwt.user._id == user._id && (
+                    <Box className={classes.auctionContainer}>
+                    <MyOrder/>
         <Paper className={classes.auctions} elevation={4} >
-            <Typography style={{display:"inline"}} type="title" color="primary" >  
+            <Box>
+            <Typography style={{display:"block"}} type="title" color="primary" >  
             Auctions you created
             </Typography>
-            <Link style={{display:"inline"}} to="/auction/new">
+            <Link style={{display:"block"}} to="/auction/new">
               <Button color="primary" variant="contained">
                 {/* <Icon className={classes.leftIcon}>add_box</Icon> */}
                 Create A New Auction
               </Button>
             </Link>
+            </Box>
             <Auctions auctions={auctions}
              removeAuction={removeAuction} />
         </Paper>
+                    </Box>
+                )}
         </Paper>
-        </>
         )
 }
 

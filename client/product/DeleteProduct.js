@@ -15,12 +15,16 @@ import {remove} from './api-product.js'
 
 const DeleteProduct = (props) => {
   const [open, setOpen] = useState(false)
+  const [alert,setAlert] = useState({
+    submitting:false
+  })
   const jwt = isAuthenticated()
 
   const handleToggle = () => {
     setOpen(!open)
   }
   const deleteProduct = () => {
+    setAlert({...alert,submitting:true})
     remove({
       shopId: props.shopId,
       productId: props.product._id,
@@ -51,8 +55,9 @@ const DeleteProduct = (props) => {
         <Button onClick={handleToggle} color="primary">
           Cancel
         </Button>
-        <Button onClick={deleteProduct} color="secondary" autoFocus="autoFocus">
-          Confirm
+        <Button onClick={deleteProduct} disabled={alert.submitting}
+         color="secondary" autoFocus="autoFocus">
+          {alert.submitting ? `Deleting ${props.product.name}` : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
   title: {
     margin: `${theme.spacing(3)}px 0 ${theme.spacing(3)}px ${theme.spacing(1)}px` ,
     color: theme.palette.protectedTitle,
-    fontSize: '1.2em'
+    fontSize: '1.2em',
+    textAlign:"center"
   },
   subheading: {
     marginTop: theme.spacing(1),
@@ -34,6 +35,13 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '36px',
     paddingTop: '16px',
     backgroundColor:'#f8f8f8'
+  },
+  paperContainer:{
+      display:"flex",
+      flexDirection:"column",
+      padding:theme.spacing(1,.5),
+      justifyContent:"center",
+      width:"100%",
   }
 }))
 
@@ -73,9 +81,10 @@ const ShopOrders = ({match}) => {
     console.log(orders)
     return(
         <div className={classes.root}>
-            <Paper  elevation={4}>
+            <Paper className={classes.paperContainer} elevation={4}>
                 <Typography type="title" className={classes.title} >
-                    Orders in {match.params.shop}
+                    {orders.length > 0 ?
+                    `Orders in ${match.params.shop}` : `You have no Orders yet`}
                 </Typography>
                 <List dense>
                     {orders.map((order,idx) => (

@@ -35,7 +35,8 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: 'auto',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textDecoration:"none"
   },
   input: {
     display: 'none'
@@ -55,8 +56,19 @@ const NewShop = (props) => {
     })
   const [alert,setAlert] = useState({
         redirect: false,
-        error: ''
+        error: '',
+        submitting:false,
+        submit:false
   })
+  React.useEffect(() => {
+    const isSubmit = isValid()
+    setAlert({...alert,submit:!isSubmit})
+  },[values])
+
+  const isValid = () => {
+    return ["name","description"].every(
+        (i) => values[i].length > 3 )
+  }
 
   const jwt = isAuthenticated()
 
@@ -67,6 +79,7 @@ const NewShop = (props) => {
     setValues({...values, [name]: value })
   }
   const clickSubmit = () => {
+    setAlert({...alert,submitting:true})
     let shopData = new FormData()
     values.name && shopData.append('name', values.name)
     values.description && shopData.append('description', values.description)
@@ -77,8 +90,9 @@ const NewShop = (props) => {
     }, shopData).then((data) => {
       if (data.error) {
         setValues({...values, error: data.error})
+        setAlert({...alert,submitting:false})
       } else {
-        setAlert({...alert, error: '', redirect: true})
+        setAlert({...alert, error: '',submitting:false, redirect: true})
       }
     })
   }
@@ -117,7 +131,10 @@ const NewShop = (props) => {
             }
           </CardContent>
           <CardActions>
-            <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>
+            <Button color="primary" variant="contained" onClick={clickSubmit}
+             className={classes.submit} disabled={alert.submit || alert.submitting}>
+               {alert.submitting ? "Creating a new Shop" : "Submit"}
+            </Button>
             <Link to='/seller/shops' className={classes.submit}><Button variant="contained">Cancel</Button></Link>
           </CardActions>
         </Card>

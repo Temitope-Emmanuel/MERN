@@ -67,6 +67,7 @@ const EditProduct = ({match}) => {
     })
     const [alert,setAlert] = useState({
         redirect:false,
+        submitting:false,
         error:''
     })
     const jwt = isAuthenticated()

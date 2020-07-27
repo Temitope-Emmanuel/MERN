@@ -104,7 +104,6 @@ const Signin = (props) => {
               onChange={handleChange('password')} margin="normal"/>
             <br/> {
               alert.error && (<Typography component="p" color="error">
-                {/* <Icon color="error" className={classes.error}>error</Icon> */}
                 {alert.error}
               </Typography>)
             }

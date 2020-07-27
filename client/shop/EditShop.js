@@ -72,6 +72,7 @@ const EditShop = ({match}) => {
     const [alert,setAlert] = useState({
         redirect: false,
         error: '',
+        submitting:false
     })
     useEffect(() => {
       const abortController = new AbortController()
@@ -93,6 +94,7 @@ const EditShop = ({match}) => {
     }, [])
     
     const clickSubmit = () => {
+      setAlert({...alert,submitting:true})
         let shopData = new FormData()
         values.name && shopData.append('name', values.name)
         values.description && shopData.append('description', values.description)
@@ -161,7 +163,10 @@ const EditShop = ({match}) => {
                     }
                   </CardContent>
                   <CardActions>
-                    <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Update</Button>
+                    <Button color="primary" variant="contained" disabled={alert.submitting}
+                     onClick={clickSubmit} className={classes.submit}>
+                       {alert.submitting ? `Uploading the changes to ${values.name}` : "Update"}
+                    </Button>
                   </CardActions>
                 </Card>
                 </Grid>

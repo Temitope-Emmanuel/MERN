@@ -87,12 +87,12 @@ const Chips = (props) => {
       />
       <Chip
         icon={<FaceIcon/>}
-        label="Supplies"
+        label="Entertainment"
         clickable
         color="primary"
         onDelete={handleDelete}
-        onClick={handleLabel("Supplies")}
-        deleteIcon={label === "Supplies" ?<DoneIcon/> : <AddIcon />}
+        onClick={handleLabel("Entertainment")}
+        deleteIcon={label === "Entertainment" ?<DoneIcon/> : <AddIcon />}
       />
       </Paper>
         </Typography>

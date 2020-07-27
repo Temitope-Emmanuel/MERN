@@ -70,7 +70,7 @@ const Auctions = (props) => {
         )
     }
     return(
-        <List dense>
+        <List style={{width:"100%"}} dense>
             {props.auctions.map((auction,i) => (
                 <span key={i}>
                     <ListItem button >

@@ -65,6 +65,7 @@ const NewProduct = ({match}) => {
     const[alert,setAlert] = useState({
         redirect: false,
         submit:true,
+        submitting:false,
         shop:{},
         error: ''
     })
@@ -103,6 +104,7 @@ const NewProduct = ({match}) => {
         setValues({...values,category:value})
       }
       const clickSubmit = () => {
+        setAlert({...alert,submitting:true})
         let productData = new FormData()
         values.name && productData.append('name', values.name)
         values.description && productData.append('description', values.description)
@@ -116,7 +118,7 @@ const NewProduct = ({match}) => {
           token: jwt.token
         }, productData).then((data) => {
           if (data.error) {
-            setAlert({...alert, error: data.error})
+            setAlert({...alert,error: data.error,submitting:false})
           } else {
             setAlert({...alert, error: '', redirect: true})
           }
@@ -178,9 +180,10 @@ const NewProduct = ({match}) => {
           </CardContent>
           <CardActions>
             <Button color="primary" variant="contained"
-             disabled={alert.submit}
+             disabled={alert.submit || alert.submitting}
              onClick={clickSubmit} className={classes.submit}
-             >Submit</Button>
+             >{alert.submitting ? "Adding a new Product" : "Submit"}
+            </Button>
             <Link to={'/seller/shop/edit/'+match.params.shopId}
              className={classes.submit}>
                  <Button variant="contained">Cancel</Button></Link>

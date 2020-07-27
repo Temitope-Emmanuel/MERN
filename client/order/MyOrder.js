@@ -12,7 +12,7 @@ import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
-    maxWidth: 600,
+    width: 600,
     margin: '12px 24px',
     padding: theme.spacing(3),
     backgroundColor: '#3f3f3f0d',

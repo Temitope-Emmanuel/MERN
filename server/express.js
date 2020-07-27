@@ -22,7 +22,7 @@ import productRoutes from "./routes/product.routes"
 import orderRoutes from "./routes/order.routes"
 import auctionRoutes from "./routes/auction.routes"
 
-// import devBundle from './devBundle'
+import devBundle from './devBundle'
 
 const app = express()
 const CURRENT_WORKING_DIR = process.cwd()
@@ -30,7 +30,7 @@ const CURRENT_WORKING_DIR = process.cwd()
 
 
 // Only for development
-// devBundle.compile(app)
+devBundle.compile(app)
 
 
 app.use(bodyParser.json())
