@@ -79,15 +79,6 @@ const Signin = (props) => {
       }    
 
     const {redirectToReferrer} = alert
-
-    if(redirectToReferrer){
-        const {from} = props.location.state || {
-            from :{
-                pathname:'/'
-            }
-        }    
-        return <Redirect to={from} />
-    }
     if(isAuthenticated() ){
       const {from} = props.location.state || {
         from :{
@@ -97,6 +88,14 @@ const Signin = (props) => {
       return <Redirect to={from } />
     }
     
+    if(redirectToReferrer){
+        const {from} = props.location.state || {
+            from :{
+                pathname:'/'
+            }
+        }    
+        return <Redirect to={from} />
+    }
     return (
         <Card className={classes.card}>
           <CardContent>

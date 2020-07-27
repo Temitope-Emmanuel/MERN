@@ -57,7 +57,7 @@ const FollowGrid = (props) => {
     )
 }
 
-FollowGrid.PropTypes = {
+FollowGrid.propTypes = {
     people:PropTypes.array.isRequired
 }
 

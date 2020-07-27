@@ -43,14 +43,14 @@ const useStyles = makeStyles(theme => ({
 
 const FindPeople = (props) => {
   const classes = useStyles()
-    const [values,setValues] = React.useState({
+    const [values,setValues] = useState({
         users:[],
         open:false,
         followMessage:''
     })
     const jwt = isAuthenticated()
 
-    React.useEffect(() => {
+    useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
         findPeople({
@@ -67,7 +67,7 @@ const FindPeople = (props) => {
         return function cleanup(){
             abortController.abort()
         }
-    })
+    },[])
 
     const clickFollow = (user,index) => {
       follow({

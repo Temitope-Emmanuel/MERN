@@ -18,6 +18,7 @@ import {Redirect, Link} from 'react-router-dom'
 import FollowProfileButton from "./FollowProfileButton"
 import ProfileTabs from "./ProfileTabs"
 import FindPeople from "./FindPeople"
+import {listByUser} from "../post/api-post"
 
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
@@ -29,6 +30,12 @@ const useStyles = makeStyles(theme => ({
   title: {
     marginTop: theme.spacing(3),
     color: theme.palette.protectedTitle
+  },
+  tabContainer:{
+      margin:theme.spacing(2,1),
+      borderRadius:"3em 0 3em 0",
+      minHeight:"15em",
+      paddingTop:theme.spacing(5)
   }
 }))
 
@@ -43,6 +50,7 @@ const Profile = ({match}) => {
         error:"",
         redirectToSignIn:false
     })
+    const [posts,setPost] = React.useState([])
     let photoUrl = "";
     const jwt = isAuthenticated()
     photoUrl = value.user._id ? 
@@ -68,6 +76,7 @@ const Profile = ({match}) => {
                     redirectToSignIn:true
                 })
             }else{
+                loadPosts(data._id)
                 let following = checkFollow(data)
                 setValue({...value,user:data,following:following})
             }
@@ -89,6 +98,24 @@ const Profile = ({match}) => {
                 setValue({...value,user:data,following:!value.following})
             }
         })
+    }
+    const loadPosts = user => {
+        listByUser({
+            userId:user,
+            token:jwt.token
+        }).then((data) => {
+            if(data.error){
+                console.log(data.error)
+            }else{
+                setPost(data)
+            }
+        })
+    }
+    const removePost = (post) => {
+        const updatedPosts = posts
+        const idx = updatedPosts.indexOf(post)
+        updatedPosts.splice(idx,1)
+        setPost(updatedPosts)
     }
 
     if(alert.redirectToSignIn){
@@ -140,14 +167,15 @@ const Profile = ({match}) => {
                                 new Date(value.user.created)).toDateString()}/>
                         </ListItem>
                     </List>
-                    {/* <ProfileTabs {...user} /> */}
             </Paper>
-            <h3 style={{
-                textAlign:"center",
-                fontWeight:"400",
-                fontSize:"2em"
-            }} >People You Can Follow</h3>
-            {/* <FindPeople/> */}
+                    {jwt.user._id == value.user._id &&
+                    <Paper className={classes.tabContainer} elevation={5} >
+                    <Typography gutter={true} align="center" variant="h5">
+                        Your Timeline
+                    </Typography>
+                    <ProfileTabs user={value.user} posts={posts} removePostUpdate={removePost} />
+                    <FindPeople/>
+                </Paper>}
             </>
             )
     }

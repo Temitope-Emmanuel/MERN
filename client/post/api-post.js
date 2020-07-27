@@ -15,14 +15,14 @@ export const listNewsFeed = async (params,credential,signal) => {
         console.log(err)        
     }
 }
-export const listByUser = async (params,credentials) => {
+export const listByUser = async (params) => {
     try{
         let response = await fetch(`/api/posts/by/${params.userId}`,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json',
-                'Authorization':`Bearer ${credentials.token}`
+                'Authorization':`Bearer ${params.token}`
             }
         })
         return await response.json()
@@ -79,7 +79,6 @@ export const like = async(params,credentials,postId) => {
         console.log(err)
     }
 }
-
 export const unlike = async(params,credentials,postId) => {
     try{
         let response = await fetch('/api/posts/unlike',{
@@ -98,7 +97,6 @@ export const unlike = async(params,credentials,postId) => {
         console.log(err)
     }
 }
-
 export const comment = async (params,credentials,postId,comment) => {
     try{
         let response = await fetch('/api/posts/comment',{
@@ -117,7 +115,6 @@ export const comment = async (params,credentials,postId,comment) => {
         console.log(err)
     }
 }
-
 export const uncomment = async(params,credentials,postId,comment) => {
     try{
         let response = await fetch('/api/posts/uncomment',{

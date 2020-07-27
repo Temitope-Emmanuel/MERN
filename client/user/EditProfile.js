@@ -126,7 +126,6 @@ const EditProfile = ({ match }) => {
     event.target.value
     
     setValues({...values, [name]: value})
-    console.log(values)
   }
   
     if (values.redirectToProfile) {

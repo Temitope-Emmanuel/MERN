@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import FollowGrid from "./FollowGrid"
+import PostList from "../post/PostList"
 
 const ProfileTabs = (props) => {
     const [tab,setTab] = React.useState(1)
@@ -14,26 +15,30 @@ const ProfileTabs = (props) => {
     console.log(props)
     return(
         <div>
-            <AppBar>
+            <AppBar position="relative">
                 <Tabs
                  onChange={handleTabChange}
                  indicatorColor="primary"
-                 textColor="primary"
                  variant="fullWidth"
                  value={tab} >
+                     <Tab label="Posts" />
                      <Tab label="Following" />
                      <Tab label="Followers" />
-                     {/* <Tab label="Following" /> */}
                 </Tabs>
             </AppBar>
-            {/* {tab === 0 && <TabContainer><PostList 
-                removeUpdate={props.removePostUpdate}
-                 posts={props.posts}/></TabContainer>} */}
-            {/* {tab === 1 && <TabContainer>
-                <FollowGrid people={props.following}/>
-            </TabContainer>} */}
-            {tab === 2 && <TabContainer>
-                <FollowGrid people={props.followers}/>
+            {tab === 0 && 
+            <TabContainer>
+                <PostList 
+                 removeUpdate={props.removePostUpdate}
+                 post={props.posts}/>
+                </TabContainer>}
+            {tab === 1 && 
+            <TabContainer>
+                <FollowGrid people={props.user.following}/>
+            </TabContainer>}
+            {tab === 2 && 
+            <TabContainer>
+                <FollowGrid people={props.user.followers}/>
             </TabContainer>}
         </div>
     )
@@ -41,15 +46,14 @@ const ProfileTabs = (props) => {
 
 ProfileTabs.propTypes = {
     user:PropTypes.object.isRequired,
-    // removePostUpdate:PropTypes.func.isRequired,
-    // user:PropTypes.object.isRequired
+    removePostUpdate:PropTypes.func.isRequired,
+    user:PropTypes.object.isRequired
 }
 
 const TabContainer = (props) => {
     return(
         <Typography component="div" style={{padding:8*2}} >
             {props.children}
-            tisisadiv
         </Typography>
     )
 }
