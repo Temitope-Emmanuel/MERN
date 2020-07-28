@@ -20,7 +20,7 @@ import authRoutes from "./routes/auth.routes"
 import postRoutes from "./routes/post.routes"
 
 // Comment out before building for production
-import devBundle from './devBundle'
+// import devBundle from './devBundle'
 
 const app = express()
 const CURRENT_WORKING_DIR = process.cwd()
@@ -28,7 +28,7 @@ const CURRENT_WORKING_DIR = process.cwd()
 
 
 // Only for development
-devBundle.compile(app)
+// devBundle.compile(app)
 
 
 app.use(bodyParser.json())
