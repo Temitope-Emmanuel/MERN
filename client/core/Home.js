@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
       display:"flex",
       justifyContent:"center",
       width:"100%",
-      backgroundColor:"purple",
+//       backgroundColor:"purple",
       flexDirection:"column",
       alignItems:"center"
     },
