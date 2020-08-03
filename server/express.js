@@ -10,7 +10,7 @@ import Template from "../template"
 // For SSR functionality
 import React from "react"
 import ReactDOMServer from "react-dom/server"
-import StaticRouter from "react-router-dom/StaticRouter"
+import Router from "react-router-dom"
 import MainRouter from "../client/MainRouter"
 import {ServerStyleSheets,ThemeProvider} from "@material-ui/styles"
 import theme from "../client/theme"
@@ -54,11 +54,11 @@ app.get('*', (req, res) => {
     const context = {}
     const markup = ReactDOMServer.renderToString(
         sheets.collect(
-          <StaticRouter location={req.url} context={context}>
+          <Router.StaticRouter location={req.url} context={context}>
             <ThemeProvider theme={theme}>
               <MainRouter />
             </ThemeProvider>
-          </StaticRouter>
+          </Router.StaticRouter>
         )
       )
       if (context.url) {

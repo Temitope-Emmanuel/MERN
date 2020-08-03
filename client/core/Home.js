@@ -10,6 +10,7 @@ import Newsfeed from "../post/Newsfeed"
 import FindPeople from "../user/FindPeople"
 import {isAuthenticated} from "../auth/auth-helper"
 
+
 const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
@@ -17,7 +18,6 @@ const useStyles = makeStyles(theme => ({
       display:"flex",
       justifyContent:"center",
       width:"100%",
-      backgroundColor:"purple",
       flexDirection:"column",
       alignItems:"center"
     },
@@ -85,7 +85,11 @@ const Home = ({history}) => {
                 </Grid>
             )}
             {jwt &&
-          <Grid container spacing={12}>
+          <Grid container style={{
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center"
+          }} spacing={10}>
             <Grid item xs={6} sm={6}>
               <Newsfeed/>
             </Grid>

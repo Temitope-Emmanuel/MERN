@@ -5,9 +5,16 @@ import TextField from '@material-ui/core/TextField'
 import Avatar from '@material-ui/core/Avatar'
 import Icon from '@material-ui/core/Icon'
 import PropTypes from 'prop-types'
+import IconButton from '@material-ui/core/IconButton'
 import {makeStyles} from '@material-ui/core/styles'
 import {comment, uncomment} from './api-post.js'
 import {isAuthenticated} from './../auth/auth-helper'
+import Dialog from '@material-ui/core/Dialog'
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
+
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
@@ -41,10 +48,18 @@ const useStyles = makeStyles(theme => ({
 const Comments = (props) => {
     const classes = useStyles()
     const [text,setText] = useState("")
+    const [open,setOpen] = useState(false)
     const jwt = isAuthenticated()
 
     const handleChange = (evt) => {
         setText(evt.target.value)
+    }
+    const handleToggle = () => {
+        setOpen(!open)
+    }
+    const addEmoji = e => {
+        setText(text.concat(e.native))
+        handleToggle()
     }
     const addComment = (evt) => {
         if(evt.keyCode == 13 && evt.target.value){
@@ -99,6 +114,12 @@ const Comments = (props) => {
 
     return(
         <div>
+            <Dialog open={open} disableBackdropClick
+             onClose={handleToggle}>
+                <Picker title='Choose a Reaction'
+                 onSelect={addEmoji} 
+           />
+        </Dialog>
             <CardHeader avatar={
             <Avatar
             src={`/api/users/photo/${jwt.user._id}?${new Date().getTime()}`}
@@ -111,6 +132,15 @@ const Comments = (props) => {
             onChange = {handleChange}
             placeholder="Write Something"
             className={classes.commentField}
+            InputProps={{
+                endAdornment:(
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleToggle}>
+                    <EmojiEmotionsIcon/>
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             margin="normal"
             />
         } className={classes.cardHeader} />

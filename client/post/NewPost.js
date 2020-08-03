@@ -3,17 +3,21 @@ import {makeStyles} from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import Dialog from '@material-ui/core/Dialog'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
-import Icon from '@material-ui/core/Icon'
 import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton'
 import PhotoCamera from '@material-ui/icons/PhotoCamera'
 import {create} from './api-post.js'
 import {isAuthenticated} from '../auth/auth-helper'
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -65,8 +69,12 @@ const NewPost = (props) => {
     const [alert,setAlert] = useState({
         error:'',
         submitting:false,
+        open:false,
         user:{}
     })
+    const handleToggle = () => {
+      setAlert({...alert,open:!alert.open})
+    }
 
     const jwt = isAuthenticated()
     
@@ -122,6 +130,15 @@ const NewPost = (props) => {
                      onChange={handleChange('text')}
                      className={classes.textField}
                      margin="normal"
+                     InputProps={{
+                       endAdornment:(
+                         <InputAdornment position="end">
+                           <IconButton onClick={handleToggle}>
+                           <EmojiEmotionsIcon/>
+                           </IconButton>
+                         </InputAdornment>
+                       )
+                     }}
                      />
                      <input accept="image/*" onChange={handleChange('photo')}
                       className={classes.input} id="icon-button-file" type="file" />
@@ -153,6 +170,13 @@ const NewPost = (props) => {
                     </Button>
                 </CardActions>
             </Card>
+            <Dialog open={alert.open} disableBackdropClick
+             onClose={handleToggle}>
+          
+          <Picker set="apple"
+           title='Choose a Reaction' onSelect={(e) => {setValues({...values,text:values.text.concat(e.native)}),setAlert({...alert,open:false})}} 
+           />
+        </Dialog>
         </div>
     )
 }
