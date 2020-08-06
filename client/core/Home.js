@@ -18,6 +18,10 @@ const useStyles = makeStyles(theme => ({
       display:"flex",
       justifyContent:"center",
       width:"100%",
+<<<<<<< HEAD
+=======
+//       backgroundColor:"purple",
+>>>>>>> 0ef62139d5ab9312b6296ab9da07d050b3d165cd
       flexDirection:"column",
       alignItems:"center"
     },
